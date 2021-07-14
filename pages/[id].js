@@ -1,19 +1,17 @@
-import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import Link from 'next/link'
 import restaurantsService from '../services/restaurants.service'
-import axios from 'axios'
 
 export async function getStaticProps() {
-  let restaurants = [];
+  let restaurantsDetails = [];
 
   await restaurantsService
-    .getAllRestaurants()
-    .then((res) => (restaurants = res.data))
+    .getRestaurantDetails()
+    .then((res) => (restaurantsDetails = res.data))
     .catch((err) => console.error('error', err));
 
-  if (!restaurants) {
+  if (!restaurantsDetails) {
     return {
       notFound: true,
     };
@@ -21,7 +19,7 @@ export async function getStaticProps() {
 
   return {
     props: {
-      restaurants,
+      restaurantsDetails,
     },
   };
 }
@@ -29,7 +27,7 @@ export async function getStaticProps() {
 
 
 
-const Home = ({ restaurants }) => {
+const RestaurantDetails = ({ details }) => {
 
   const HEIGHT = 200;
   const WIDTH = 225;
@@ -37,7 +35,7 @@ const Home = ({ restaurants }) => {
   return (
     <div>
 
-      {restaurants.map((data) => {
+      {details.map((data) => {
         return (
           <div key={data.id}>
 
@@ -63,4 +61,4 @@ const Home = ({ restaurants }) => {
 
 
 
-export default Home;
+export default RestaurantDetails;
