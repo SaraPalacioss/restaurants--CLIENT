@@ -1,19 +1,23 @@
 import axios from 'axios';
+import getConfig from 'next/config'
 
-const baseUrl = `${process.env.URL}/api/restaurants`;
+const {publicRuntimeConfig} = getConfig()
+const {APIURL} = publicRuntimeConfig
+
+const baseUrl = `${APIURL}/api/restaurants`;
 
 class RestaurantsService {
 	constructor() {
 		this.instance = axios.create({
 			baseURL: baseUrl,
-			withCredentials: true,
+			// withCredentials: true,
 		});
 	}
 	
 	getAllRestaurants = () => this.instance.get('/');
     getRestaurantDetails = (id) => this.instance.get(`/${id}`);
-    editRestaurantDetails = (id) => this.instance.post(`/${id}`);
-    addNewRestaurant = (id) => this.instance.get(`/new`);
+    editRestaurantDetails = (id, restaurant) => this.instance.post(`/${id}`, restaurant);
+    addNewRestaurant = (restaurant) => this.instance.post(`/new`, restaurant);
     deleteRestaurant = (id) => this.instance.delete(`/${id}`);
 }
 

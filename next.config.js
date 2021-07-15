@@ -13,5 +13,8 @@ module.exports = {
 		],
 	},
   reactStrictMode: true,
+  publicRuntimeConfig: {
+    APIURL: process.env.APIURL
+  }
 
 };
