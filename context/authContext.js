@@ -22,7 +22,7 @@ export function useAuthContext() {
     const context = useContext(AuthContext);
 
     if (!context) {
-        console.error('Error deploying Auth Context!!!');
+        console.error('Error deploying AuthContext!!!');
     }
 
     return context;
