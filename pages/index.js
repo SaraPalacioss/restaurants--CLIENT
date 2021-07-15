@@ -39,13 +39,17 @@ const Home = ({ restaurants }) => {
 
       {restaurants.map((data) => {
         return (
-          <div key={data.id}>
-
+         
+          <div key={data._id} params={data._id}>
+          <Link href={`/${data._id}`}><a>
           <Image src={data.image} height={HEIGHT}
 					width={WIDTH} alt="restaurant photo" />
 
             <div>{data.name}</div>
 
+          </a>
+        
+</Link>
           </div>
 
         )
