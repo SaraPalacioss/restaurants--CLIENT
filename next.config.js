@@ -10,6 +10,7 @@ module.exports = {
 			'www.wazwu.com',
 			'resizer.otstatic.com',
 			'i.pinimg.com',
+			'media.istockphoto.com',
 		],
 	},
   reactStrictMode: true,

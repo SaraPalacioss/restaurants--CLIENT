@@ -1,7 +1,15 @@
-import '../styles/globals.css'
+import App, { Container } from 'next/app';
+import { AuthContextProvider } from "../context/authContext";
 
-function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />
+class MyApp extends App {
+  render() {
+    const { Component, pageProps } = this.props;
+    return (
+      <AuthContextProvider>
+        <Component {...pageProps} />
+      </AuthContextProvider>
+    );
+  }
 }
 
-export default MyApp
+export default MyApp;

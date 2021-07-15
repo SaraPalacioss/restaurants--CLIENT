@@ -1,19 +1,15 @@
 import Head from 'next/head'
 import Image from 'next/image'
-
-import Link from 'next/link'
+import { useRouter } from 'next/router';
 import restaurantsService from '../../services/restaurants.service'
 
-import React, { useEffect, useContext, useState } from 'react';
-
-
-
-
+import React, { useState } from 'react';
 
 const NewResturant = () => {
+    const router = useRouter();
     const [name, saveName] = useState('');
     const [neighborhood, saveNeighborhood] = useState('')
-    const [photograph, savePhotograph] = useState('')
+    const [image, saveImage] = useState('')
     const [address, saveAddress] = useState('')
     const [lat, saveLat] = useState('')
     const [lng, saveLng] = useState('')
@@ -34,8 +30,6 @@ const NewResturant = () => {
                 .addNewRestaurant(team)
                 .then((res) => console.log(res.data))
                 .catch((err) => console.error('error', err));
-
-
         }
         createNewRestaurant()
     }
@@ -46,7 +40,7 @@ const NewResturant = () => {
         addNewRestaurant({
             name,
             neighborhood,
-            photograph,
+            image,
             address,
             lat,
             lng,
@@ -59,18 +53,16 @@ const NewResturant = () => {
             saturday,
             sunday,
         });
-      
-
+        router.push(`/`)
     };
 
-
+    const closeNewRestaurant= (id)=> {
+        router.push(`/restaurants`)
+    };
 
     return (
         <div>
-
-
             <div>
-
                 <form onSubmit={submitNewRestaurant}>
 
                     <div >
@@ -90,13 +82,13 @@ const NewResturant = () => {
                             placeholder="neighborhood"
                             onChange={(e) => saveNeighborhood(e.target.value)}
                         />
-                        <label>photo: </label>
+                        <label>Image: </label>
                         <input
                             type="text"
-                            name="photograph"
-                            value={photograph}
-                            placeholder="Photograph"
-                            onChange={(e) => savePhotograph(e.target.value)}
+                            name="image"
+                            value={image}
+                            placeholder="image"
+                            onChange={(e) => saveImage(e.target.value)}
                         />
                         <label>Address: </label>
                         <input
@@ -187,9 +179,12 @@ const NewResturant = () => {
                             onChange={(e) => saveSunday(e.target.value)}
                         />
                     </div>
-                    <div className="navigation">
+                    <div>
                         <button type="submit">Save</button>
                     </div>
+                    <div>
+            <button onClick={()=>closeNewRestaurant()}>Close</button>
+        </div>
                 </form>
             </div>
 

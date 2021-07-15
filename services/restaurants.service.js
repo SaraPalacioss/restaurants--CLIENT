@@ -13,7 +13,6 @@ class RestaurantsService {
 			// withCredentials: true,
 		});
 	}
-	
 	getAllRestaurants = () => this.instance.get('/');
     getRestaurantDetails = (id) => this.instance.get(`/${id}`);
     editRestaurantDetails = (id, restaurant) => this.instance.post(`/${id}`, restaurant);
