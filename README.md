@@ -1,3 +1,52 @@
+# NextJS App || Restaurant Challenge
+
+NextJS App desarrollada para el challenge de Tailor-Hub y pendiente de rematar.
+
+## Comenzando 🚀
+
+Sigue estas instrucciones para poder obtener una copia del proyecto en funcionamiento con el fin de posibles nuevos desarrollos y pruebas:
+
+Client:
+- Fork this repo
+- Clone this repo
+
+Server:
+- Fork and clone this repo: https://github.com/SaraPalacioss/restaurants-challenge--SERVER
+
+
+## Despliegue 📦
+
+Consulta la documentación oficial de Next JS para obtener toda la información (o la documentación que figura al final):
+
+* [NEXT JS](https://nextjs.org/learn/basics/create-nextjs-app)
+
+## Construido con 🛠️
+* [Mongo Atlas](https://www.mongodb.com/) - Cloud
+* [Expres JS](https://expressjs.com/) - Entorno de ejecución
+* [NEXT JS](https://nextjs.org/) - React Framework 
+* [Node JS](https://nodejs.org/) - API
+* [react-bootstrap](https://react-bootstrap.github.io/) - Diseño
+
+## Autor✒️
+
+* **Sara Palacios** - [sarapalacioss](https://github.com/sarapalacioss)
+
+
+## Licencia 📄
+
+Este proyecto no está sujeto a licencia.
+
+## Expresiones de Gratitud 🎁
+
+* Comparte este proyecto 📢
+* Da las gracias públicamente 🤓
+
+---
+⌨️ con ❤️ por [sarapalacioss](https://github.com/sarapalacioss) 😊
+
+----------------
+
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
