@@ -40,10 +40,10 @@ class UserService {
 	}
 		;
 
-	favourites = (restaurantID, userID) => {
+	favourites = ( id) => {
 		return this.instance
-			.post('/favourites',  restaurantID, userID )
-			.then(res => Promise.resolve(res.data))
+			.post(`/restaurants/${id}/favourites`,  id )
+			.then(res => response(res.data))
 			.catch(error => console.error(error))
 	};
 

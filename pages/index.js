@@ -57,7 +57,6 @@ const Home = () => {
                     width={WIDTH} alt="restaurant photo" />}
                 </a></Link>
                 <div className="align-info">
-                  {loggedIn && <button className="fav-btn" onClick={() => addToMyFavourites(data._id, user.id)}>♡</button>}{' '}
                   <Link href={`/restaurants/${data._id}`}><a>
                   <h2>{data.name}</h2>
                   <div>

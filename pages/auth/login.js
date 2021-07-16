@@ -7,7 +7,7 @@ import 'bootstrap/dist/css/bootstrap.css'
 import { Button } from 'react-bootstrap';
 
 const LoginUser = () => {
-  const { user, loggedIn, session, setUser, setLoggedIn, setSession } = useAuthContext()
+  const { user, loggedIn, session, userID, setUserID, setUser, setLoggedIn, setSession } = useAuthContext()
   const router = useRouter();
 
   const [credentials, setCredentials] = useState({
@@ -26,9 +26,11 @@ const LoginUser = () => {
       .then(
         (user) => {
         if(user) {
+          console.log(user)
           setAlert(false)
        setLoggedIn(true)
           setUser(user.username)
+          setUserID(user.id)
           router.push("/")
         } else {
           console.log(user)

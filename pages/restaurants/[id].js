@@ -3,12 +3,13 @@ import { useRouter } from 'next/router';
 import { useAuthContext } from '../../context/authContext';
 import Image from 'next/image'
 import restaurantsService from '../../services/restaurants.service'
+import userService from '../../services/user.service';
 import { Button } from 'react-bootstrap';
 import MyLayout from "../../layouts/Layout";
 
 
 const RestaurantDetails = () => {
-    const { user, loggedIn,session, setUser, setLoggedIn, setSession} =useAuthContext()
+    const { user, loggedIn,session, userID, setUserID, setUser, setLoggedIn, setSession} =useAuthContext()
 
     const [details, saveDetails] = useState({});
 
@@ -39,12 +40,32 @@ const RestaurantDetails = () => {
             )
     };
 
+
+    const addToMyFavourites =  (userID) => {
+         userService
+         .favourites(userID)
+         .then((result) => {
+           console.log('hola')
+         })
+         .catch((err) => {
+           console.log(err);
+         });
+     };
+
+     
     const redirectEditRestaurant = (id) => {
         router.push(`/restaurants/${id}/edit-restaurant`)
     };
 
     const redirectHome = () => {
         router.push(`/`)
+        const loadingRestaurants = async () => {
+            await restaurantsService
+              .getAllRestaurants()
+              .then((res) => (saveRestaurants(res.data)))
+              .catch((err) => console.error('error', err));
+          }
+          loadingRestaurants();
     };
 
     
@@ -82,9 +103,10 @@ const RestaurantDetails = () => {
                 <Button onClick={() => deleteRestaurant(id)} variant="danger">Delete</Button>
             </div>{' '}
             <div>
-                <Button onClick={() => redirectHome()} variant="primary">View all restaurants</Button>
             </div>
-
+         <Button variant="dark" className="fav-btn" onClick={() => addToMyFavourites(id)}>♡</Button>
+         <Button onClick={() => redirectHome()} variant="link">View all restaurants</Button>
+{console.log(userID)}
            </div>} 
             
 

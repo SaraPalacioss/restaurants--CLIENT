@@ -16,8 +16,9 @@ export default function MyLayout({ children }) {
             .loggedin()
             .then((result) => {
                 setLoggedIn(result);
-                setUser(result.username)
+                setUser(result)
                 setLoggedIn(false)
+                console.log(result)
             });
     };
 
