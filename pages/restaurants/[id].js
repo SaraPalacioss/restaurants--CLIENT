@@ -1,20 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import restaurantsService from '../../services/restaurants.service'
+import { useAuthContext } from '../../context/authContext';
 import Image from 'next/image'
-
+import restaurantsService from '../../services/restaurants.service'
+import { Button } from 'react-bootstrap';
+import MyLayout from "../../layouts/Layout";
 
 
 const RestaurantDetails = () => {
+    const { user, loggedIn,session, setUser, setLoggedIn, setSession} =useAuthContext()
 
     const [details, saveDetails] = useState({});
 
     const router = useRouter();
+
     const { query: { id } } = router;
 
-
     useEffect(() => {
-
         const loadingDetails = async () => {
             await restaurantsService
                 .getRestaurantDetails(id)
@@ -23,7 +25,6 @@ const RestaurantDetails = () => {
         }
         loadingDetails();
     }, [id]);
-
 
     const deleteRestaurant = async (id) => {
         await restaurantsService.deleteRestaurant(id)
@@ -42,34 +43,59 @@ const RestaurantDetails = () => {
         router.push(`/restaurants/${id}/edit-restaurant`)
     };
 
-
     const redirectHome = () => {
         router.push(`/`)
     };
 
-    const { name, address, cuisine_type, image, lat, lng, neighborhood, Friday, Monday, Saturday, Sunday, Thursday, Tuesday, Wednesday, _id } = details
-    const HEIGHT = 300;
-    const WIDTH = 325;
+    
+    const HEIGHT = 500;
+    const WIDTH = 825;
+
 
     return (
-        <div>
+        <div className="container home">
 
-            {name}
-            {address}
-            {image && <Image src={image} height={HEIGHT}
+           <h3>{details.name}</h3> 
+           <div>
+           {details.image && <Image src={details.image} height={HEIGHT}
                 width={WIDTH} alt="restaurant photo" />}
+           </div>
+            <p className="info"><strong>{details.address}</strong></p>
+            <span>{details.neighborhood}</span>
+            <p>Cuisine type {details.cuisine_type}</p>
             <div>
-                <button onClick={() => redirectEditRestaurant(id)}>Edit</button>
+            <p className="schedule-info">Schedule</p>
+            <p className="schedule-data">Monday: {details.monday}</p>
+            <p className="schedule-data">Tuesday: {details.tuesday}</p>
+            <p className="schedule-data">Wednesday: {details.wednesday}</p>
+            <p className="schedule-data">Thursday: {details.thursday}</p>
+            <p className="schedule-data">Friday: {details.friday}</p>
+            <p className="schedule-data">Saturday: {details.saturday}</p>
+            <p className="schedule-data">Sunday: {details.sunday}</p>
+            </div>
+     
+          {loggedIn && <div  className="btn-group">
+           <div>
+                <Button onClick={() => redirectEditRestaurant(id)} variant="success">Edit</Button>
             </div>
             <div>
-                <button onClick={() => deleteRestaurant(id)}>Delete</button>
-            </div>
+                <Button onClick={() => deleteRestaurant(id)} variant="danger">Delete</Button>
+            </div>{' '}
             <div>
-                <button onClick={() => redirectHome()}>View all restaurants</button>
+                <Button onClick={() => redirectHome()} variant="primary">View all restaurants</Button>
             </div>
+
+           </div>} 
+            
+
+
+            
 
         </div>
     );
 }
+
+
+RestaurantDetails.Layout = MyLayout
 
 export default RestaurantDetails;

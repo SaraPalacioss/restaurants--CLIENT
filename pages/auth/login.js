@@ -1,113 +1,101 @@
-
-
-import { useRouter } from 'next/router';
-import Link from 'next/link'
-import { useSession, signIn, signOut } from 'next-auth/client';
-
 import React, { useEffect, useState } from 'react';
-import router from 'next/router';
-import userService from '../../services/user.service';
 import { useAuthContext } from '../../context/authContext';
-
+import { useRouter } from 'next/router';
+import userService from '../../services/user.service';
+import MyLayout from "../../layouts/Layout";
+import 'bootstrap/dist/css/bootstrap.css'
+import { Button } from 'react-bootstrap';
 
 const LoginUser = () => {
-  const { user, loggedIn,session, setUser, setLoggedIn, setSession} =useAuthContext()
+  const { user, loggedIn, session, setUser, setLoggedIn, setSession } = useAuthContext()
+  const router = useRouter();
 
-  
+  const [credentials, setCredentials] = useState({
+    username: '',
+    password: '',
+  });
 
-	const [credentials, setCredentials] = useState({
-		username: '',
-		password: '',
-	});
+  const [alert, setAlert] = useState(false)
 
-
-
-	
-
+  const [message, setMessage] = useState('')
 
   const handleLogin = (e) => {
-  
+
     e.preventDefault()
     userService.login(credentials)
-    .then(
-      (user) => {
-        router.push("/")
-        setLoggedIn(true)
-        setUser(user.data.username)
+      .then(
+        (user) => {
+        if(user) {
+          setAlert(false)
+       setLoggedIn(true)
+          setUser(user.username)
+          router.push("/")
+        } else {
+          console.log(user)
+          return
+        }
+         
 
-      },
-      (error) => {
-        console.error(error)
-      }
-    )
+        },
+        (error) => {
+          console.error(error)
+
+        }
+        
+      )
+
   }
 
 
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setCredentials({
+      ...credentials,
+      [name]: value,
+    });
 
-	const handleChange = (event) => {
-		const { name, value } = event.target;
-		setCredentials({
-			...credentials,
-			[name]: value,
-		});
-	
-	};
+  };
 
+  return (
+    <div className="container" >
 
+      <div >
+        <form onSubmit={handleLogin} className="form form-container form-align">
+          <div>
+            <label htmlFor="Username">Username</label>
 
-    return (
-        <div >
-         {!session && <>
-     <div>
-     <form noValidate onSubmit={handleLogin}>
-             
-            
-              <div>
-              <label htmlFor="Username">Username</label>
-
-                <input
-                  onChange={handleChange}
-                  value={credentials.username}
-                  name="username"
-                  id="username"
-                  type="email"
-               
-                />
-              </div>
-              <div>
-              <label htmlFor="password">Password</label>
-
-                <input
-                  onChange={handleChange}
-                  value={credentials.password}
-                  id="password"
-                  type="password"
-                  name="password"
-               
-                />
-              </div>
-             
-              <div>
-                <button
-                 
-                  type="submit"
-                  
-                >
-                  Login
-                </button>
-              </div>
-            </form>
-     </div>
-    </>}
-    {session && <>
-      Signed  <br/>
-      <button onClick={() => signOut()}>Sign out</button>
-    </>}
+            <input
+              onChange={handleChange}
+              value={credentials.username}
+              name="username"
+              id="username"
+              type="email"
+            />
+          </div>
+          <div>
+            <label htmlFor="password">Password</label>
+            <input
+              onChange={handleChange}
+              value={credentials.password}
+              id="password"
+              type="password"
+              name="password"
+            />
+          </div>
+          <div className="btn-group">
+            <Button variant="light"
+              type="submit"
+            >
+              Login
+            </Button>
+          </div>
+        </form>
       </div>
-    );
+    </div>
+  );
 }
 
-
+LoginUser.Layout = MyLayout
 export default LoginUser;
 
 
