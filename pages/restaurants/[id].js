@@ -3,11 +3,9 @@ import { useRouter } from 'next/router';
 import restaurantsService from '../../services/restaurants.service'
 import Image from 'next/image'
 
-import useAuthContext from '../../context/authContext';
 
 
 const RestaurantDetails = () => {
-    useAuthContext();
 
     const [details, saveDetails] = useState({});
 
@@ -55,7 +53,6 @@ const RestaurantDetails = () => {
 
     return (
         <div>
-            {`${useAuthContext().user}`}
 
             {name}
             {address}

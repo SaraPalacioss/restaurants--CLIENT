@@ -13,8 +13,13 @@ class UserService {
 			// withCredentials: true,
 		});
 	}
-	login = () => this.instance.post('/login');
-    register = (id) => this.instance.get(`/register`);
+	login = (user) => this.instance.post('/login', user);
+    register = (user) => this.instance.post(`/register`, user);
+	logout = () => this.instance.post("/logout");
+	loggedin = () => this.instance.get("/loggedin");
+	logout = () => this.instance.post("/logout");
+
+	  ;
 }
 
 const userService = new UserService();

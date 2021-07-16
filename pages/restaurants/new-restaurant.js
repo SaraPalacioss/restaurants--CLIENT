@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import Image from 'next/image'
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import restaurantsService from '../../services/restaurants.service'
 
 import React, { useState } from 'react';
@@ -24,15 +24,14 @@ const NewResturant = () => {
 
 
 
-    const addNewRestaurant = (team) => {
-        const createNewRestaurant = async () => {
-            await restaurantsService
-                .addNewRestaurant(team)
-                .then((res) => console.log(res.data))
-                .catch((err) => console.error('error', err));
-        }
-        createNewRestaurant()
+    const addNewRestaurant = async (restaurant) => {
+        await restaurantsService
+            .addNewRestaurant(restaurant)
+            .then((res) => console.log(res.data))
+            .catch((err) => console.error('error', err));
     }
+    addNewRestaurant()
+
 
     const submitNewRestaurant = (e) => {
         e.preventDefault();
@@ -56,7 +55,7 @@ const NewResturant = () => {
         router.push(`/`)
     };
 
-    const closeNewRestaurant= (id)=> {
+    const closeNewRestaurant = (id) => {
         router.push(`/restaurants`)
     };
 
@@ -183,8 +182,8 @@ const NewResturant = () => {
                         <button type="submit">Save</button>
                     </div>
                     <div>
-            <button onClick={()=>closeNewRestaurant()}>Close</button>
-        </div>
+                        <button onClick={() => closeNewRestaurant()}>Close</button>
+                    </div>
                 </form>
             </div>
 
