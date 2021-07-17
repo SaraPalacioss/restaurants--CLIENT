@@ -7,7 +7,7 @@ import 'bootstrap/dist/css/bootstrap.css'
 import { Button } from 'react-bootstrap';
 
 const LoginUser = () => {
-  const { user, loggedIn, session, userID, setUserID, setUser, setLoggedIn, setSession } = useAuthContext()
+  const { user, loggedIn, session, alert, message, userID, setUser, setUserID, setLoggedIn, setSession, setAlert, setMessage } = useAuthContext()
   const router = useRouter();
 
   const [credentials, setCredentials] = useState({
@@ -15,48 +15,47 @@ const LoginUser = () => {
     password: '',
   });
 
-  const [alert, setAlert] = useState(false)
-
-  const [message, setMessage] = useState('')
-
-  const handleLogin = (e) => {
-
-    e.preventDefault()
-    userService.login(credentials)
-      .then(
-        (user) => {
-        if(user) {
-          console.log(user)
-          setAlert(false)
-       setLoggedIn(true)
-          setUser(user.username)
-          setUserID(user.id)
-          router.push("/")
-        } else {
-          console.log(user)
-          return
-        }
-         
-
-        },
-        (error) => {
-          console.error(error)
-
-        }
-        
-      )
-
-  }
-
-
-  const handleChange = (event) => {
-    const { name, value } = event.target;
+  const handleChange = e => {
+    const { name, value } = e.target;
     setCredentials({
       ...credentials,
       [name]: value,
     });
 
   };
+
+
+  const handleLogin = (e) => {
+
+    e.preventDefault();
+    userService
+      .login(credentials)
+      .then((res) => {
+        if (res.username) {
+ 
+          setLoggedIn(true)
+          setUser(res.username)
+          setSession(true)
+          setMessage()
+          setAlert(false)
+          setUserID(res.id)
+          router.push(`/`)
+
+        } else {
+          setMessage(res.message)
+          setAlert(true)
+        }
+
+        console.log(res)
+
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+
+ 
 
   return (
     <div className="container" >
@@ -105,19 +104,5 @@ export default LoginUser;
 
 
 
-
-// const validators = {
-// 	username: (value) => {
-// 		let message;
-// 		if (!value) message = 'Username is required';
-// 		return message;
-// 	},
-// 	password: (value) => {
-// 		let message;
-// 		if (!value) message = 'Password is required';
-// 		else if (value.length < 6) message = 'Password must be longer than 6 characters';
-// 		return message;
-// 	},
-// };
 
 

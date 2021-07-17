@@ -10,22 +10,24 @@ class UserService {
 	constructor() {
 		this.instance = axios.create({
 			baseURL: baseUrl,
-			// withCredentials: true,
+			withCredentials: true,
 		});
 	}
 
 
 	register = (user) => {
-		return this.instance.post('/register', user)
+		return this.instance
+			.post('/register', user)
 			.then(res => Promise.resolve(res.data))
 			.catch(error => console.error(error))
 	}
 
 	login = (user) => {
-		return this.instance.post('/login', user)
-			.then(res => Promise.resolve(res.data))
-			.catch(error => console.error(error))
-	}
+		return this.instance
+		  .post('/login', user)
+		  .then(res => Promise.resolve(res.data))
+		  .catch((err) => console.error(err));
+	  };
 
 	loggedin = () => {
 		return this.instance.get('/loggedin')
@@ -40,13 +42,23 @@ class UserService {
 	}
 		;
 
-	favourites = ( id) => {
+		myfavourites = (id) => this.instance.get(`/myfavourites`, id)
+		.then(res => Promise.resolve(res.data))
+			.catch(error => console.error(error))
+
+
+	addFavourite = (restaurantID, userID) => {
 		return this.instance
-			.post(`/restaurants/${id}/favourites`,  id )
-			.then(res => response(res.data))
+			.post(`/favourites`,  {restaurantID: restaurantID, userID: userID} )
+			.then(res => Promise.resolve(res.data))
 			.catch(error => console.error(error))
 	};
-
+	deleteFavourite = (restaurantID, userID) => {
+		return this.instance
+			.post(`/deletefavourite`,  {restaurantID: restaurantID, userID: userID} )
+			.then(res => Promise.resolve(res.data))
+			.catch(error => console.error(error))
+	};
 }
 
 const userService = new UserService();

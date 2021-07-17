@@ -1,58 +1,61 @@
 
 
 import { useSession } from 'next-auth/client';
+import { useAuthContext } from '../../context/authContext';
 import React, { useEffect, useState } from 'react';
-import router from 'next/router';
+import { useRouter } from 'next/router';
 import userService from '../../services/user.service';
 import { Button } from 'react-bootstrap';
 import MyLayout from "../../layouts/Layout";
 
 
 const RegisterUser = () => {
+  const { user, loggedIn, session, alert, message, userID, setUser, setUserID, setLoggedIn, setSession, setAlert, setMessage } = useAuthContext()
+  const router = useRouter();
 
-  const [session, setSession] = useSession();
   const [credentials, setCredentials] = useState({
     username: '',
     password: '',
   });
 
-  useEffect(() => {
-    if (session) router.push('/');
-  }, [session]);
-
-  const newUser = async (user) => {
-    await userService
-      .register(user)
-      .then((res) => {
-        console.log(res.data)
-        router.push('/auth/login')
-      }
-      )
-      .catch((err) => console.error('error', err));
-  }
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const { username, password } = credentials;
-
-    newUser({
-      username, password
-    })
-  };
-
   
-  const handleChange = (event) => {
-    const { name, value } = event.target;
+  const handleChange = e => {
+    const { name, value } = e.target;
     setCredentials({
       ...credentials,
       [name]: value,
     });
+
   };
+
+  const handleSignUp = e => {
+    e.preventDefault()
+    userService
+    .register(credentials)
+    .then((res) => {
+      if (res.username) {
+        setMessage()
+        setAlert(false)
+        router.push(`/auth/login`)
+
+      } else {
+        setMessage(res.message)
+        setAlert(true)
+      }
+
+      console.log(res)
+
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
+
 
   return (
     <div className="container" >
       <div>
-        <form noValidate onSubmit={handleSubmit} className="form form-container form-align">
+        <form noValidate onSubmit={handleSignUp} className="form form-container form-align">
           <div>
             <label htmlFor="Username">Username</label>
             <input

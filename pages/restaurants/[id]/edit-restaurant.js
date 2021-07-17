@@ -4,6 +4,7 @@ import restaurantsService from '../../../services/restaurants.service'
 import MyLayout from "../../../layouts/Layout";
 import { Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.css'
+import userService from '../../../services/user.service';
 
 
 const EditRestaurant = () => {
@@ -63,6 +64,7 @@ const EditRestaurant = () => {
                 }
             )
     }
+
 
 
     const closeEdition = (id) => {

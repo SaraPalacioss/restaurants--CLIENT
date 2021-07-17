@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import userService from '../services/user.service';
 import { Navbar, Nav, Container, Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.css'
+import Link from 'next/link'
 
 export default function MyLayout({ children }) {
 
@@ -16,18 +17,17 @@ export default function MyLayout({ children }) {
             .loggedin()
             .then((result) => {
                 setLoggedIn(result);
-                setUser(result)
-                setLoggedIn(false)
-                console.log(result)
+                setUser(result.username)
             });
     };
+
 
     const logOut = async () => {
         await userService
             .logout()
             .then((res) => {
                 checkIfLoggedIn()
-
+                
             })
             .catch((err) => console.error('error', err));
     }
@@ -44,19 +44,19 @@ export default function MyLayout({ children }) {
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="me-auto">
-                            {loggedIn && <Nav.Link href="#link">My favourites</Nav.Link>}
+                            {user && <Nav.Link><Link href="/myfavourites"><a>My favourites</a></Link></Nav.Link>}
                         </Nav>
                         <Nav className="justify-content-center">
-                            {loggedIn && <Button variant="primary" size="sm" onClick={() => redirectNewRestaurant()}>
+                            {user && <Button variant="primary" size="sm" onClick={() => redirectNewRestaurant()}>
                                 Add new restaurant
                             </Button>}
                         </Nav>
                         <Navbar.Collapse className="justify-content-end">
                             <Nav>
-                                {loggedIn && <Navbar.Text className="welcome">Wellcome {user}!</Navbar.Text>}
-                                {loggedIn && <Nav.Link onClick={() => logOut()}>Log out</Nav.Link>}
-                                {!loggedIn && <Nav.Link href="/auth/register">Register</Nav.Link>}
-                                {!loggedIn && <Nav.Link href="/auth/login">Login</Nav.Link>}
+                                {user && <Navbar.Text className="welcome">Wellcome {user}!</Navbar.Text>}
+                                {user && <Nav.Link onClick={() => logOut()}>Log out</Nav.Link>}
+                                {!user && <Nav.Link href="/auth/register">Register</Nav.Link>}
+                                {!user && <Nav.Link href="/auth/login">Login</Nav.Link>}
                             </Nav>
                         </Navbar.Collapse>
                     </Navbar.Collapse>

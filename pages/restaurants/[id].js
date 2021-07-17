@@ -9,24 +9,36 @@ import MyLayout from "../../layouts/Layout";
 
 
 const RestaurantDetails = () => {
-    const { user, loggedIn,session, userID, setUserID, setUser, setLoggedIn, setSession} =useAuthContext()
+    const { user, loggedIn,session, userID, favourites, setFavourites, setUserID, setUser, setLoggedIn, setSession} =useAuthContext()
 
     const [details, saveDetails] = useState({});
 
     const router = useRouter();
 
     const { query: { id } } = router;
-
+    const getUser = async () => {
+        await userService
+            .loggedin()
+            .then((res) => setFavourites(res.favourites))
+            .catch((err) => console.error('error', err));
+    }
+    
     useEffect(() => {
         const loadingDetails = async () => {
             await restaurantsService
                 .getRestaurantDetails(id)
-                .then((res) => (saveDetails(res.data)))
+                .then((res) => saveDetails(res.data))
                 .catch((err) => console.error('error', err));
         }
+        
+    
         loadingDetails();
+        getUser()
     }, [id]);
 
+  
+
+      
     const deleteRestaurant = async (id) => {
         await restaurantsService.deleteRestaurant(id)
             .then(
@@ -41,16 +53,7 @@ const RestaurantDetails = () => {
     };
 
 
-    const addToMyFavourites =  (userID) => {
-         userService
-         .favourites(userID)
-         .then((result) => {
-           console.log('hola')
-         })
-         .catch((err) => {
-           console.log(err);
-         });
-     };
+
 
      
     const redirectEditRestaurant = (id) => {
@@ -68,15 +71,40 @@ const RestaurantDetails = () => {
           loadingRestaurants();
     };
 
-    
+    const addFavourite = async (restaurantID, userID) => {
+        console.log(restaurantID)
+        console.log(userID)
+         await userService
+           .addFavourite(restaurantID, userID)
+           .then((res) => {console.log(res);    getUser()   
+           })
+           .catch((err) => console.error('error', err));
+       }
+     
+       const deleteFavourite = async (restaurantID, userID) => {
+         await userService
+           .deleteFavourite(restaurantID, userID)
+           .then((res) => {console.log(res);     getUser()
+           })      .catch((err) => console.error('error', err));
+       }
+     
+     
+       const searchFavourites = (arr, restaurantID) => {
+         return arr.includes(restaurantID)
+       }
+
+       const favOrNotFavIcon = searchFavourites(favourites, details._id)
+
     const HEIGHT = 500;
     const WIDTH = 825;
 
 
     return (
-        <div className="container home">
 
-           <h3>{details.name}</h3> 
+
+        <div className="container home">
+        { details.length ? <p>Loading...</p> : <div>
+            <h3>{details.name}</h3> 
            <div>
            {details.image && <Image src={details.image} height={HEIGHT}
                 width={WIDTH} alt="restaurant photo" />}
@@ -85,30 +113,34 @@ const RestaurantDetails = () => {
             <span>{details.neighborhood}</span>
             <p>Cuisine type {details.cuisine_type}</p>
             <div>
-            <p className="schedule-info">Schedule</p>
-            <p className="schedule-data">Monday: {details.monday}</p>
+            {/* <p className="schedule-info">Schedule</p>
+            <p className="schedule-data">Monday: {details.operating_hours.monday}</p>
             <p className="schedule-data">Tuesday: {details.tuesday}</p>
             <p className="schedule-data">Wednesday: {details.wednesday}</p>
             <p className="schedule-data">Thursday: {details.thursday}</p>
             <p className="schedule-data">Friday: {details.friday}</p>
             <p className="schedule-data">Saturday: {details.saturday}</p>
-            <p className="schedule-data">Sunday: {details.sunday}</p>
+            <p className="schedule-data">Sunday: {details.sunday}</p> */}
             </div>
      
-          {loggedIn && <div  className="btn-group">
+          {user && <div  className="btn-group">
            <div>
                 <Button onClick={() => redirectEditRestaurant(id)} variant="success">Edit</Button>
             </div>
             <div>
                 <Button onClick={() => deleteRestaurant(id)} variant="danger">Delete</Button>
             </div>{' '}
+            {favOrNotFavIcon ?                 <Button variant="dark" className="fav-btn" onClick={() => deleteFavourite(details._id, userID)}>Remove favourite</Button> :  <Button variant="dark" className="fav-btn" onClick={() => addFavourite(details._id, userID)}>Add favourite</Button>
+}
             <div>
             </div>
-         <Button variant="dark" className="fav-btn" onClick={() => addToMyFavourites(id)}>♡</Button>
+        
          <Button onClick={() => redirectHome()} variant="link">View all restaurants</Button>
 {console.log(userID)}
            </div>} 
             
+        </div>}
+          
 
 
             
