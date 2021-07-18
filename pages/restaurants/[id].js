@@ -16,6 +16,16 @@ const RestaurantDetails = () => {
     const router = useRouter();
 
     const { query: { id } } = router;
+
+    const loadingRestaurants = async () => {
+        await restaurantsService
+          .getAllRestaurants()
+          .then((res) => (setAllRestaurants(res.data)))
+          .catch((err) => console.error('error', err));
+      }
+  
+      loadingRestaurants();
+
     const getUser = async () => {
         await userService
             .loggedin()
@@ -45,6 +55,7 @@ const RestaurantDetails = () => {
                 () => {
                     console.log(`Restaurant with id: ${id} deleted`)
                     router.push('/')
+                    loadingRestaurants()
                 },
                 (error) => {
                     console.error(error)
@@ -101,10 +112,10 @@ const RestaurantDetails = () => {
 
     return (
 
-
+        
         <div className="container home">
-        { details.length ? <p>Loading...</p> : <div>
-            <h3>{details.name}</h3> 
+
+           <h3>{details.name}</h3> 
            <div>
            {details.image && <Image src={details.image} height={HEIGHT}
                 width={WIDTH} alt="restaurant photo" />}
@@ -113,14 +124,14 @@ const RestaurantDetails = () => {
             <span>{details.neighborhood}</span>
             <p>Cuisine type {details.cuisine_type}</p>
             <div>
-            {/* <p className="schedule-info">Schedule</p>
-            <p className="schedule-data">Monday: {details.operating_hours.monday}</p>
+            <p className="schedule-info">Schedule</p>
+            <p className="schedule-data">Monday: {details.monday}</p>
             <p className="schedule-data">Tuesday: {details.tuesday}</p>
             <p className="schedule-data">Wednesday: {details.wednesday}</p>
             <p className="schedule-data">Thursday: {details.thursday}</p>
             <p className="schedule-data">Friday: {details.friday}</p>
             <p className="schedule-data">Saturday: {details.saturday}</p>
-            <p className="schedule-data">Sunday: {details.sunday}</p> */}
+            <p className="schedule-data">Sunday: {details.sunday}</p>
             </div>
      
           {user && <div  className="btn-group">
@@ -139,8 +150,6 @@ const RestaurantDetails = () => {
 {console.log(userID)}
            </div>} 
             
-        </div>}
-          
 
 
             

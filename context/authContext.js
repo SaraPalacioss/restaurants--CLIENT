@@ -12,12 +12,16 @@ export const AuthContextProvider = ({ children }) => {
   const [favourites, setFavourites] = useState([]);
   const [alert, setAlert] = useState(false)
   const [message, setMessage] = useState('')
+  const [allRestaurants, setAllRestaurants] = useState(false)
+  const [filterFavs, setFilterFavs] = useState(false)
+  const [restaurants, setRestaurants] = useState([]);
+
   const values = React.useMemo(() => (
-    { user, loggedIn,session, userID, alert, message  , favourites    
-      ,setUser, setLoggedIn, setSession, setUserID, setAlert, setMessage, setFavourites
+    { user, loggedIn,session, userID, alert, message  , restaurants, favourites , allRestaurants, filterFavs 
+      ,setUser, setLoggedIn, setSession, setUserID, setAlert, setMessage, setFavourites, setAllRestaurants, setRestaurants, setFilterFavs
     }), 
     [ 
-      user, loggedIn, session, userID, alert, message, favourites ]);   
+      user, loggedIn, session, userID, alert, message, favourites,restaurants, filterFavs, allRestaurants ]);   
 
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;
 }

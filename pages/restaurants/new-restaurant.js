@@ -33,7 +33,13 @@ const NewResturant = () => {
             .then((res) => console.log(res.data))
             .catch((err) => console.error('error', err));
     }
-  
+    const loadingRestaurants = async () => {
+        await restaurantsService
+          .getAllRestaurants()
+          .then((res) => console.log(res))
+          .catch((err) => console.error('error', err));
+      }
+      loadingRestaurants();
 
     const submitNewRestaurant = (e) => {
         e.preventDefault();
@@ -53,13 +59,8 @@ const NewResturant = () => {
             saturday,
             sunday,
         });
-        const loadingRestaurants = async () => {
-            await restaurantsService
-              .getAllRestaurants()
-              .then((res) => console.log(res))
-              .catch((err) => console.error('error', err));
-          }
-          loadingRestaurants();
+        loadingRestaurants();
+
         router.push(`/`)
     };
 

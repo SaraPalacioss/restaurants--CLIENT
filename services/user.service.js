@@ -24,10 +24,10 @@ class UserService {
 
 	login = (user) => {
 		return this.instance
-		  .post('/login', user)
-		  .then(res => Promise.resolve(res.data))
-		  .catch((err) => console.error(err));
-	  };
+			.post('/login', user)
+			.then(res => Promise.resolve(res.data))
+			.catch((err) => console.error(err));
+	};
 
 	loggedin = () => {
 		return this.instance.get('/loggedin')
@@ -42,20 +42,16 @@ class UserService {
 	}
 		;
 
-		myfavourites = (id) => this.instance.get(`/myfavourites`, id)
-		.then(res => Promise.resolve(res.data))
-			.catch(error => console.error(error))
-
 
 	addFavourite = (restaurantID, userID) => {
 		return this.instance
-			.post(`/favourites`,  {restaurantID: restaurantID, userID: userID} )
+			.post(`/favourites`, { restaurantID: restaurantID, userID: userID })
 			.then(res => Promise.resolve(res.data))
 			.catch(error => console.error(error))
 	};
 	deleteFavourite = (restaurantID, userID) => {
 		return this.instance
-			.post(`/deletefavourite`,  {restaurantID: restaurantID, userID: userID} )
+			.post(`/deletefavourite`, { restaurantID: restaurantID, userID: userID })
 			.then(res => Promise.resolve(res.data))
 			.catch(error => console.error(error))
 	};

@@ -1,15 +1,17 @@
-import React from "react";
 import { useAuthContext } from '../context/authContext';
+import React, { useContext, useState, useEffect, createContext } from 'react';
+
 import { useRouter } from 'next/router';
 import userService from '../services/user.service';
 import { Navbar, Nav, Container, Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.css'
 import Link from 'next/link'
+import restaurantsService from '../services/restaurants.service';
 
 export default function MyLayout({ children }) {
 
-    const { user, loggedIn, session, setUser, setLoggedIn, setSession } = useAuthContext()
-    
+    const { user, loggedIn, session, favourites, restaurants, setRestaurants, setUser, filterFavs, setLoggedIn, setSession, setFilterFavs, allRestaurants, setAllRestaurants } = useAuthContext()
+
     const router = useRouter();
 
     const checkIfLoggedIn = async () => {
@@ -20,6 +22,24 @@ export default function MyLayout({ children }) {
                 setUser(result.username)
             });
     };
+
+    useEffect(() => {
+        const getUser = async () => {
+            await userService
+              .loggedin()
+              .then((res) => {setFavourites(res.favourites); setUser(res.username); setUserID(res.id)})
+              .catch((err) => console.error('error', err));
+          }
+        const loadingRestaurants = async () => {
+          await restaurantsService
+            .getAllRestaurants()
+            .then((res) => (setRestaurants(res.data)))
+            .catch((err) => console.error('error', err));
+        }
+    
+        loadingRestaurants();
+        getUser()
+      }, []);
 
 
     const logOut = async () => {
@@ -32,10 +52,7 @@ export default function MyLayout({ children }) {
             .catch((err) => console.error('error', err));
     }
 
-    const redirectNewRestaurant = () => {
-        router.push(`/restaurants/new-restaurant`)
-    };
-
+   
     return (
         <>
             <Navbar bg="light" expand="lg">
@@ -43,14 +60,8 @@ export default function MyLayout({ children }) {
                     <Navbar.Brand href="/">Restaurants Next Js App</Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
-                        <Nav className="me-auto">
-                            {user && <Nav.Link><Link href="/myfavourites"><a>My favourites</a></Link></Nav.Link>}
-                        </Nav>
-                        <Nav className="justify-content-center">
-                            {user && <Button variant="primary" size="sm" onClick={() => redirectNewRestaurant()}>
-                                Add new restaurant
-                            </Button>}
-                        </Nav>
+                     
+                     
                         <Navbar.Collapse className="justify-content-end">
                             <Nav>
                                 {user && <Navbar.Text className="welcome">Wellcome {user}!</Navbar.Text>}

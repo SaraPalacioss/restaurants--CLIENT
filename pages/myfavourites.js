@@ -4,7 +4,7 @@ import restaurantsService from '../services/restaurants.service'
 import { Button } from 'react-bootstrap';
 import MyLayout from "../layouts/Layout";
 import 'bootstrap/dist/css/bootstrap.css'
-import { useAuthContext } from '../context/authContext'
+import { useAuthContext } from '../context/authContext';
 import userService from '../services/user.service';
 import { Row } from 'react-bootstrap';
 import Link from 'next/link'
@@ -13,36 +13,53 @@ import Link from 'next/link'
 const MyFavourites = () => {
 
     const { user, loggedIn,session, userID, favourites, setFavourites, setUserID, setUser, setLoggedIn, setSession} =useAuthContext()
-    const [details, saveDetails] = useState({});
+    const [favDetails, saveFavDetails] = useState({
+        name: '',
+        image: '',
+    });
 
     const router = useRouter();
 
-    const { query: { id } } = router;
-    const getUser = async () => {
-        await userService
-            .loggedin()
-            .then((res) => setFavourites(res.favourites))
-            .catch((err) => console.error('error', err));
-    }
-    
-    useEffect(() => {
-        const loadingDetails = async (id) => {
-            await userService
-                .myfavourites(id)
-                .then((res) => saveDetails(res.data))
-                .catch((err) => console.error('error', err));
-        }
+
+   
+    // useEffect(() => {
+    //     // const loadingFavDetails = async (id) => {
+    //     //     await userService
+    //     //         .myfavourites(id)
+    //     //         .then((res) => saveFavDetails(res.data))
+    //     //         .catch((err) => console.error('error', err));
+    //     // }
         
     
-        loadingDetails(id);
-        getUser()
-    }, [id]);
+    //     // loadingFavDetails(id);
+    //     const getUser = async () => {
+    //         await userService
+    //             .loggedin()
+    //             .then((res) => setFavourites(res.favourites))
+    //             .catch((err) => console.error('error', err));
+    //     }
+        
+    //     getUser()
+     
+    // });
 
+    const loadingFavDetails =  (id) => {
+          restaurantsService
+            .myfavourites(id)
+            .then((res) => saveFavDetails(res.data))
+            .catch((err) => console.error('error', err));
+    }
   
 
 
-
-
+// const mapeo= async () =>{
+//    await favourites.map((data)=>{
+//         userService
+//             .myfavourites(data.id)
+//             .then((res) => saveFavDetails(res.data))
+//             .catch((err) => console.error('error', err));
+//     })
+// } 
 
 
     const HEIGHT = 500;
@@ -51,14 +68,18 @@ const MyFavourites = () => {
 
     return (
         <div>
-          {/* <div className="gap-2">
+                  {console.log(favourites[0])}
+                  <div className="gap-2">
           </div>
           <div className="container home">
             <Row xs={1} md={4} className="g-4">
-              {details.map((data) => {
+
+       
+              {/* {favourites.map((data) => {
                 return (
-                  <div key={data._id} params={data._id}>
-                    <Link href={`/restaurants/${data._id}`}><a>
+                  <div key={data}> */}
+                  {/* {console.log(favourites[0])} */}
+                    {/* <Link href={`/restaurants/${data._id}`}><a>
                       {data.image && <Image src={data.image} height={HEIGHT}
                         width={WIDTH} alt="restaurant photo" />}
                     </a></Link>
@@ -75,12 +96,12 @@ const MyFavourites = () => {
     
                     </div>
     
-    
-                  </div>
+     */}
+                  {/* </div>
                 )
-              })}
+              })} */}
             </Row>
-          </div> */}
+          </div>
         </div>
       )
     

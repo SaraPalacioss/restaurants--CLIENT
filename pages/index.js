@@ -1,9 +1,10 @@
 import Image from 'next/image'
+import React, { useContext, useState, useEffect, createContext } from 'react';
+
 import { useRouter } from 'next/router';
 import { Row } from 'react-bootstrap';
 import Link from 'next/link'
 import restaurantsService from '../services/restaurants.service'
-import React, { useEffect, useState } from 'react';
 import { useAuthContext } from '../context/authContext';
 import MyLayout from "../layouts/Layout";
 import userService from '../services/user.service';
@@ -12,11 +13,10 @@ import { Button } from 'react-bootstrap';
 
 const Home = () => {
 
-  const { user, userID, loggedIn, session, favourites, setFavourites, setUser, setUserID, setLoggedIn, setSession } = useAuthContext()
+  const { user, userID, loggedIn, session, restaurants, setRestaurants, allRestaurants, favourites, filterFavs, setFilterFavs, setAllRestaurants, setFavourites, setUser, setUserID, setLoggedIn, setSession } = useAuthContext()
 
   const router = useRouter();
 
-  const [restaurants, saveRestaurants] = useState([]);
 
   const getUser = async () => {
     await userService
@@ -32,7 +32,7 @@ const Home = () => {
     const loadingRestaurants = async () => {
       await restaurantsService
         .getAllRestaurants()
-        .then((res) => (saveRestaurants(res.data)))
+        .then((res) => (setAllRestaurants(res.data)))
         .catch((err) => console.error('error', err));
     }
 
@@ -40,20 +40,28 @@ const Home = () => {
     getUser()
   }, []);
 
-
+  const redirectNewRestaurant = () => {
+    router.push(`/restaurants/new-restaurant`)
+};
 
   const HEIGHT = 300;
   const WIDTH = 325;
 
-
   return (
     <div>
-      <div className="gap-2">
-      </div>
+      
       <div className="container home">
+      {/* {user && !filterFavs ? (<Button variant="danger" size="sm" onClick={() => {setFilterFavs(true),filterr()}}>
+                                View favourites
+                            </Button>): (<Button variant="danger" size="sm" onClick={() => {setFilterFavs(false), setRestaurants(allRestaurants)}}>
+                                View all
+                            </Button>)} */}
+                            {user && <Button variant="primary" size="sm" onClick={() => redirectNewRestaurant()}>
+                                Add new restaurant
+                            </Button>}
         <Row xs={1} md={4} className="g-4">
           {restaurants.map((data) => {
-            console.log(data._id)
+            console.log(data)
             return (
               <div key={data._id} params={data._id}>
                 <Link href={`/restaurants/${data._id}`}><a>
