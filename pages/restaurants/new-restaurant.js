@@ -1,31 +1,19 @@
-import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import restaurantsService from '../../services/restaurants.service'
 import { Button } from 'react-bootstrap';
 import { useAuthContext } from '../../context/authContext'
 import MyLayout from "../../layouts/Layout";
 import 'bootstrap/dist/css/bootstrap.css'
+import Link from 'next/link'
 
 
 const NewResturant = () => {
 
-        const { user, loggedIn,session, userID, setUserID, setUser, setLoggedIn, setSession} =useAuthContext()
+        const { user, name, neighborhood, loadingRestaurants, image, address, lat, lng, cuisine_type, monday, tuesday, wednesday, thursday, friday, saturday, sunday, saveName, saveNeighborhood, saveImage, saveAddress, saveLat, saveLng, saveCuisineType, saveMonday, saveTuesday, saveWednesday, saveThursday, saveFriday, saveSaturday,saveSunday} =useAuthContext()
 
     const router = useRouter();
-    const [name, saveName] = useState('');
-    const [neighborhood, saveNeighborhood] = useState('')
-    const [image, saveImage] = useState('')
-    const [address, saveAddress] = useState('')
-    const [lat, saveLat] = useState('')
-    const [lng, saveLng] = useState('')
-    const [cuisine_type, saveCuisineType] = useState('')
-    const [monday, saveMonday] = useState('')
-    const [tuesday, saveTuesday] = useState('')
-    const [wednesday, saveWednesday] = useState('')
-    const [thursday, saveThursday] = useState('')
-    const [friday, saveFriday] = useState('')
-    const [saturday, saveSaturday] = useState('')
-    const [sunday, saveSunday] = useState('')
+
+
 
     const addNewRestaurant = async (restaurant) => {
         await restaurantsService
@@ -33,13 +21,7 @@ const NewResturant = () => {
             .then((res) => console.log(res.data))
             .catch((err) => console.error('error', err));
     }
-    const loadingRestaurants = async () => {
-        await restaurantsService
-          .getAllRestaurants()
-          .then((res) => console.log(res))
-          .catch((err) => console.error('error', err));
-      }
-      loadingRestaurants();
+
 
     const submitNewRestaurant = (e) => {
         e.preventDefault();
@@ -59,15 +41,20 @@ const NewResturant = () => {
             saturday,
             sunday,
         });
-        loadingRestaurants();
+     
 
         router.push(`/`)
+        saveName(''),
+         saveNeighborhood(''), saveImage(''), saveAddress(''), saveLat(''), saveLng(''), saveCuisineType(''), saveMonday(''), saveTuesday(''), saveWednesday(''), saveThursday(''), saveFriday(''), saveSaturday(''),saveSunday('')
+        loadingRestaurants()
     };
 
     const closeNewRestaurant = (id) => {
         router.push(`/`)
+
     };
 
+  
     return (
         <div className="container">
 {user ?      
@@ -82,6 +69,7 @@ const NewResturant = () => {
                     name="name"
                     value={name}
                     placeholder="Name"
+                    required="true"
                     onChange={(e) => saveName(e.target.value)}
                 />
             </div>
@@ -229,7 +217,7 @@ const NewResturant = () => {
     </form>
 </div>
 
- : <div>mal</div>}
+ : <div><p>Plese <Link href="/auth/register">register</Link> or <Link href="/auth/login">login</Link> to access this content</p></div>}
  </div>   )
 }
 

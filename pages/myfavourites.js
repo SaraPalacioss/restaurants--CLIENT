@@ -8,103 +8,68 @@ import { useAuthContext } from '../context/authContext';
 import userService from '../services/user.service';
 import { Row } from 'react-bootstrap';
 import Link from 'next/link'
+import Image from 'next/image'
 
 
 const MyFavourites = () => {
 
-    const { user, loggedIn,session, userID, favourites, setFavourites, setUserID, setUser, setLoggedIn, setSession} =useAuthContext()
-    const [favDetails, saveFavDetails] = useState({
-        name: '',
-        image: '',
-    });
-
-    const router = useRouter();
+  const { user, restaurants, setViewFav, viewFav, loggedIn, session, userID, favourites, setFavourites, setUserID, setUser, setLoggedIn, setSession } = useAuthContext()
 
 
-   
-    // useEffect(() => {
-    //     // const loadingFavDetails = async (id) => {
-    //     //     await userService
-    //     //         .myfavourites(id)
-    //     //         .then((res) => saveFavDetails(res.data))
-    //     //         .catch((err) => console.error('error', err));
-    //     // }
-        
-    
-    //     // loadingFavDetails(id);
-    //     const getUser = async () => {
-    //         await userService
-    //             .loggedin()
-    //             .then((res) => setFavourites(res.favourites))
-    //             .catch((err) => console.error('error', err));
-    //     }
-        
-    //     getUser()
-     
-    // });
+  const router = useRouter();
 
-    const loadingFavDetails =  (id) => {
-          restaurantsService
-            .myfavourites(id)
-            .then((res) => saveFavDetails(res.data))
-            .catch((err) => console.error('error', err));
+
+
+  useEffect(() => {
+    const loadingFavDetails = () => {
+      restaurantsService
+        .getAllRestaurants()
+        .then((res) => setViewFav(restaurants.filter((res) => favourites.includes(res._id))))
+        .catch((err) => console.error('error', err));
     }
-  
 
 
-// const mapeo= async () =>{
-//    await favourites.map((data)=>{
-//         userService
-//             .myfavourites(data.id)
-//             .then((res) => saveFavDetails(res.data))
-//             .catch((err) => console.error('error', err));
-//     })
-// } 
+    loadingFavDetails()
 
 
-    const HEIGHT = 500;
-    const WIDTH = 825;
 
 
-    return (
-        <div>
-                  {console.log(favourites[0])}
-                  <div className="gap-2">
-          </div>
-          <div className="container home">
-            <Row xs={1} md={4} className="g-4">
 
-       
-              {/* {favourites.map((data) => {
-                return (
-                  <div key={data}> */}
-                  {/* {console.log(favourites[0])} */}
-                    {/* <Link href={`/restaurants/${data._id}`}><a>
-                      {data.image && <Image src={data.image} height={HEIGHT}
-                        width={WIDTH} alt="restaurant photo" />}
-                    </a></Link>
+
+  }, []);
+
+
+
+
+  const HEIGHT = 500;
+  const WIDTH = 825;
+
+
+  return (
+    <div>
+{viewFav.length ?      
+      <div className="container home">
+        <Row xs={1} md={4} className="g-4">
+
+          {viewFav.map((data) => {
+            return (
+              <div key={data.id}>
+                <a href={`/restaurants/${data._id}`}>
+                  {data.image && <Image src={data.image} height={HEIGHT}
+                    width={WIDTH} alt="restaurant photo" />}
+
+                  {data.name}
+                  {data.address}
+                </a>
+              </div>
+            )
+          })}
     
-      
-    
-                    <div className="align-info">
-                      <Link href={`/restaurants/${data._id}`}><a>
-                        <h2>{data.name}</h2>
-                        <div>
-                          <span>{data.neighborhood}</span>
-                        </div>
-                      </a></Link>
-    
-                    </div>
-    
-     */}
-                  {/* </div>
-                )
-              })} */}
-            </Row>
-          </div>
-        </div>
-      )
-    
+        </Row>
+      </div>:<div>There is no favourites.</div>}
+    </div>
+  )
+
 }
 
 

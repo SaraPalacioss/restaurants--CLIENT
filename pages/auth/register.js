@@ -1,22 +1,14 @@
-
-
-import { useSession } from 'next-auth/client';
 import { useAuthContext } from '../../context/authContext';
-import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import userService from '../../services/user.service';
 import { Button } from 'react-bootstrap';
 import MyLayout from "../../layouts/Layout";
+import Link from 'next/link'
 
 
 const RegisterUser = () => {
-  const { user, loggedIn, session, alert, message, userID, setUser, setUserID, setLoggedIn, setSession, setAlert, setMessage } = useAuthContext()
+  const { setAlert, setMessage, alert, message, credentials, setCredentials } = useAuthContext()
   const router = useRouter();
-
-  const [credentials, setCredentials] = useState({
-    username: '',
-    password: '',
-  });
 
   
   const handleChange = e => {
@@ -43,7 +35,6 @@ const RegisterUser = () => {
         setAlert(true)
       }
 
-      console.log(res)
 
     })
     .catch((err) => {
@@ -56,6 +47,8 @@ const RegisterUser = () => {
     <div className="container" >
       <div>
         <form noValidate onSubmit={handleSignUp} className="form form-container form-align">
+        {alert && <span>{message}</span>}
+
           <div>
             <label htmlFor="Username">Username</label>
             <input
@@ -76,6 +69,7 @@ const RegisterUser = () => {
               name="password"
             />
           </div>
+          <span>Have an account? login <Link href="/auth/login">here</Link></span>
           <div className="btn-group">
             <Button variant="primary"
               type="submit"
@@ -96,22 +90,5 @@ export default RegisterUser;
 
 
 
-
-
-
-
-// const validators = {
-// 	username: (value) => {
-// 		let message;
-// 		if (!value) message = 'Username is required';
-// 		return message;
-// 	},
-// 	password: (value) => {
-// 		let message;
-// 		if (!value) message = 'Password is required';
-// 		else if (value.length < 6) message = 'Password must be longer than 6 characters';
-// 		return message;
-// 	},
-// };
 
 

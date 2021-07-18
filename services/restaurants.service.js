@@ -15,13 +15,9 @@ class RestaurantsService {
 	}
 	getAllRestaurants = () => this.instance.get('/');
 	getRestaurantDetails = (id) => this.instance.get(`/${id}`);
+	myfavourites = () => this.instance.get(`/myfavourites`);
 
 
-	myfavourites = (id) => {
-		return this.instance.get('/myfavourites', id)
-			.then(res => Promise.resolve(res.data))
-			.catch(error => console.error(error))
-	}
 	editRestaurantDetails = (id, restaurant) => this.instance.post(`/${id}`, restaurant);
 	addNewRestaurant = (restaurant) => this.instance.post(`/new`, restaurant);
 	deleteRestaurant = (id) => this.instance.delete(`/${id}`);

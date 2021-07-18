@@ -14,7 +14,6 @@ class UserService {
 		});
 	}
 
-
 	register = (user) => {
 		return this.instance
 			.post('/register', user)

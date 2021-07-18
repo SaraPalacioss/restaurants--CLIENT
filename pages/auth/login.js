@@ -1,19 +1,16 @@
-import React, { useEffect, useState } from 'react';
 import { useAuthContext } from '../../context/authContext';
 import { useRouter } from 'next/router';
 import userService from '../../services/user.service';
 import MyLayout from "../../layouts/Layout";
 import 'bootstrap/dist/css/bootstrap.css'
 import { Button } from 'react-bootstrap';
+import Link from 'next/link'
 
 const LoginUser = () => {
-  const { user, loggedIn, session, alert, message, userID, setUser, setUserID, setLoggedIn, setSession, setAlert, setMessage } = useAuthContext()
+  const { setAlert, setMessage,alert, message, checkIfLoggedIn, credentials, setCredentials } = useAuthContext()
   const router = useRouter();
 
-  const [credentials, setCredentials] = useState({
-    username: '',
-    password: '',
-  });
+
 
   const handleChange = e => {
     const { name, value } = e.target;
@@ -24,7 +21,6 @@ const LoginUser = () => {
 
   };
 
-
   const handleLogin = (e) => {
 
     e.preventDefault();
@@ -32,21 +28,17 @@ const LoginUser = () => {
       .login(credentials)
       .then((res) => {
         if (res.username) {
- 
-          setLoggedIn(true)
-          setUser(res.username)
-          setSession(true)
+          checkIfLoggedIn()
           setMessage()
           setAlert(false)
-          setUserID(res.id)
           router.push(`/`)
+          console.log('huhu')
 
         } else {
           setMessage(res.message)
           setAlert(true)
         }
 
-        console.log(res)
 
       })
       .catch((err) => {
@@ -62,6 +54,7 @@ const LoginUser = () => {
 
       <div >
         <form onSubmit={handleLogin} className="form form-container form-align">
+        {alert && <span>{message}</span>}
           <div>
             <label htmlFor="Username">Username</label>
 
@@ -83,6 +76,7 @@ const LoginUser = () => {
               name="password"
             />
           </div>
+          <span>Don't have an account? register <Link href="/auth/register">here</Link></span>
           <div className="btn-group">
             <Button variant="light"
               type="submit"

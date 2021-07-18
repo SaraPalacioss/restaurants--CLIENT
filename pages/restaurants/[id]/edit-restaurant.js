@@ -1,33 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import restaurantsService from '../../../services/restaurants.service'
 import MyLayout from "../../../layouts/Layout";
 import { Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.css'
-import userService from '../../../services/user.service';
+import { useAuthContext } from '../../../context/authContext';
 
 
 const EditRestaurant = () => {
+    const { saveRestaurantNewDetails, restaurantNewDetails } = useAuthContext()
 
     const router = useRouter();
     const { query: { id } } = router;
-
-    const [restaurantNewDetails, saveRestaurantNewDetails] = useState({
-        name: '',
-        neighborhood: '',
-        address: '',
-        lat: '',
-        lng: '',
-        image: '',
-        cuisine_type: '',
-        monday: '',
-        tuesday: '',
-        wednesday: '',
-        thursday: '',
-        friday: '',
-        saturday: '',
-        sunday: '',
-    });
 
     useEffect(() => {
 
@@ -107,7 +91,7 @@ const EditRestaurant = () => {
                             type="text"
                             name="image"
                             value={image}
-                            placeholder="Photograph"
+                            placeholder="Image"
                             onChange={onChangeHandler}
                         />
                     </div>
