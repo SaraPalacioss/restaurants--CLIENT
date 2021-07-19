@@ -1,7 +1,8 @@
-import axios from 'axios';
-import getConfig from 'next/config'
 
-const { publicRuntimeConfig } = getConfig()
+import axios from 'axios';
+
+
+
 const { APIURL } = publicRuntimeConfig
 
 const baseUrl = `${APIURL}/api/auth`;
