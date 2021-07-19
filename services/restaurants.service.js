@@ -1,17 +1,9 @@
 import getConfig from 'next/config'
 import axios from 'axios';
 
-const getNodeEnv = () => {
-	const { publicRuntimeConfig } = getConfig();
-  
-	const APIURL = publicRuntimeConfig.APIURL || false;
-  
-	return  APIURL 
-  };
-  
-  const env = getNodeEnv()
-  
-  console.log(env)
+const { publicRuntimeConfig } = getConfig()
+
+const baseUrl = `${publicRuntimeConfig.staticFolder}/api/auth`;
 
 class RestaurantsService {
 	constructor() {

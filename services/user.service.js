@@ -1,23 +1,9 @@
 import getConfig from 'next/config'
 import axios from 'axios';
 
+const { publicRuntimeConfig } = getConfig()
 
-
-const getNodeEnv = () => {
-	const { publicRuntimeConfig } = getConfig();
-  
-	const APIURL = publicRuntimeConfig.APIURL || false;
-  
-	return  APIURL 
-  };
-  
-  const env = getNodeEnv()
-  
-  console.log(env)
-
-
-
-const baseUrl = `${APIURL}/api/auth`;
+const baseUrl = `${publicRuntimeConfig.staticFolder}/api/auth`;
 class UserService {
 	constructor() {
 		this.instance = axios.create({
