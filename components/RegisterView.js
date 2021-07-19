@@ -6,8 +6,11 @@ import AuthForm from '../components/AuthForm';
 
 
 const RegisterView = () => {
-    const { setAlert, setMessage, loggedIn, alert, message, credentials, setCredentials } = useAuthContext()
+    const { setAlert, setMessage, loggedIn, alert, message, credentials, setCredentials } = useAuthContext();
+
+
     const router = useRouter();
+
 
     const handleChange = e => {
         const { name, value } = e.target;
@@ -16,6 +19,7 @@ const RegisterView = () => {
             [name]: value,
         });
     };
+    
 
     const handleSignUp = e => {
         e.preventDefault()

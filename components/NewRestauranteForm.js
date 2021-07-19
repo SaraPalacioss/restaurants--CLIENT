@@ -1,27 +1,87 @@
 import { useRouter } from 'next/router';
-import restaurantsService from '../services/restaurants.service'
+import restaurantsService from '../services/restaurants.service';
 import { Button } from 'react-bootstrap';
-import { useAuthContext } from '../context/authContext'
+import { useAuthContext } from '../context/authContext';
 import MyLayout from "../layouts/Layout";
-import 'bootstrap/dist/css/bootstrap.css'
-import Link from 'next/link'
+import Link from 'next/link';
+import styled from 'styled-components';
+
+
+const Label = styled.label`
+		color: black;
+		font-weight: bold;
+		text-transform: uppercase;
+`;
+
+
+const H3 = styled.h3`
+              color: white;
+		padding: 10px 20px;
+		border-radius: 5%5%;
+        font-weight: bolder;
+		background-color: black;        
+`;
+
+
+const Input = styled.input`
+		width: 100%;
+		height: 30px;
+		margin: 0.5rem;
+		padding: 10px;
+`;
+
+
+const Form = styled.form`
+		width: 100%;
+		max-width: 600px;
+		margin-right: 15px;
+		display: flex;
+		flex-direction: column;
+		align-content: center;
+		justify-content: center;
+		align-items: center;
+		text-align: center;
+		
+		@media (max-width: 350px) {
+		width: fit-content;
+		font-size: 0.8rem;
+
+		button, label, span {
+			font-size: 0.7rem;
+		}
+	}
+`;
+
+
+const Div = styled.div`
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    height: 90vh;        
+`;
+
+
+const DivBtnGroup = styled.div`
+    display: flex;
+    flex-direction: row;
+    margin-top: 20px;
+`;
 
 
 const NewResturant = () => {
 
-    const { name, loggedIn, neighborhood, loadingRestaurants, address, cuisine_type, saveName, saveNeighborhood, saveAddress, saveCuisineType } = useAuthContext()
+    const { name, loggedIn, neighborhood, loadingRestaurants, address, cuisine_type, saveName, saveNeighborhood, saveAddress, saveCuisineType } = useAuthContext();
 
     const router = useRouter();
-
-
 
     const addNewRestaurant = async (restaurant) => {
         await restaurantsService
             .addNewRestaurant(restaurant)
             .then((res) => { console.log(res.data); loadingRestaurants() })
             .catch((err) => console.error('error', err));
+    };
 
-    }
 
     const submitNewRestaurant = (e) => {
         e.preventDefault();
@@ -29,25 +89,17 @@ const NewResturant = () => {
             name,
             neighborhood,
             address,
-            // lat,
-            // lng,
             cuisine_type,
-            // monday,
-            // tuesday,
-            // wednesday,
-            // thursday,
-            // friday,
-            // saturday,
-            // sunday,
         });
 
-        loadingRestaurants()
+        loadingRestaurants();
         window.location.href = '/'
-        saveName(''),
-            saveNeighborhood(''),
-            saveAddress(''),
-            saveCuisineType('')
+        saveName('');
+        saveNeighborhood('');
+        saveAddress('');
+        saveCuisineType('');
     };
+
 
     const closeNewRestaurant = (id) => {
         router.push(`/`)
@@ -55,15 +107,17 @@ const NewResturant = () => {
 
 
     return (
-        <div className="container">
+        <Div className="container">
             {loggedIn ?
-                <div>
-                    <form onSubmit={submitNewRestaurant} className="form form-container form-align">
-                        <h3>NEW RESTAURANT</h3>
+                <Div>
+                    <Form onSubmit={submitNewRestaurant}>
+                        <div>
+                            <H3>NEW RESTAURANT</H3>
+                        </div>
                         <div>
                             <div>
-                                <label>Name: </label>
-                                <input
+                                <Label>Name: </Label>
+                                <Input
                                     type="text"
                                     name="name"
                                     value={name}
@@ -73,8 +127,8 @@ const NewResturant = () => {
                                 />
                             </div>
                             <div>
-                                <label>Neighborhood: </label>
-                                <input
+                                <Label>Neighborhood: </Label>
+                                <Input
                                     type="text"
                                     name="neighborhood"
                                     value={neighborhood}
@@ -83,8 +137,8 @@ const NewResturant = () => {
                                 />
                             </div>
                             <div>
-                                <label>Address: </label>
-                                <input
+                                <Label>Address: </Label>
+                                <Input
                                     type="text"
                                     name="address"
                                     value={address}
@@ -92,29 +146,9 @@ const NewResturant = () => {
                                     onChange={(e) => saveAddress(e.target.value)}
                                 />
                             </div>
-                            {/* <div>
-                                <label>lat: </label>
-                                <input
-                                    type="number"
-                                    name="lat"
-                                    value={lat}
-                                    placeholder="Lat"
-                                    onChange={(e) => saveLat(e.target.value)}
-                                />
-                            </div> */}
-                            {/* <div>
-                                <label>Lng: </label>
-                                <input
-                                    type="number"
-                                    name="lng"
-                                    value={lng}
-                                    placeholder="Lng"
-                                    onChange={(e) => saveLng(e.target.value)}
-                                />
-                            </div> */}
                             <div>
-                                <label>Cuisine Type: </label>
-                                <input
+                                <Label>Cuisine Type: </Label>
+                                <Input
                                     type="text"
                                     name="cuisine_type"
                                     value={cuisine_type}
@@ -122,80 +156,8 @@ const NewResturant = () => {
                                     onChange={(e) => saveCuisineType(e.target.value)}
                                 />
                             </div>
-                            {/*
-                            <p className="schedule">Schedule:</p>
-                            <div>
-                                <label>Monday: </label>
-                                <input
-                                    type="text"
-                                    name="monday"
-                                    value={monday}
-                                    placeholder="Monday"
-                                    onChange={(e) => saveMonday(e.target.value)}
-                                />
-                            </div>
-                            <div>
-                                <label>Tuesday: </label>
-                                <input
-                                    type="text"
-                                    name="tuesday"
-                                    value={tuesday}
-                                    placeholder="Name"
-                                    onChange={(e) => saveTuesday(e.target.value)}
-                                />
-                            </div>
-                            <div>
-                                <label>Wednesday: </label>
-                                <input
-                                    type="text"
-                                    name="wednesday"
-                                    value={wednesday}
-                                    placeholder="wednesday"
-                                    onChange={(e) => saveWednesday(e.target.value)}
-                                />
-                            </div>
-                            <div>
-                                <label>Thursday: </label>
-                                <input
-                                    type="text"
-                                    name="thursday"
-                                    value={thursday}
-                                    placeholder="thursday"
-                                    onChange={(e) => saveThursday(e.target.value)}
-                                />
-                            </div>
-                            <div>
-                                <label>Friday: </label>
-                                <input
-                                    type="text"
-                                    name="friday"
-                                    value={friday}
-                                    placeholder="friday"
-                                    onChange={(e) => saveFriday(e.target.value)}
-                                />
-                            </div>
-                            <div>
-                                <label>Saturday: </label>
-                                <input
-                                    type="text"
-                                    name="saturday"
-                                    value={saturday}
-                                    placeholder="Saturdar"
-                                    onChange={(e) => saveSaturday(e.target.value)}
-                                />
-                            </div>
-                            <div>
-                                <label>Sunday: </label>
-                                <input
-                                    type="text"
-                                    name="sunday"
-                                    value={sunday}
-                                    placeholder="sunday"
-                                    onChange={(e) => saveSunday(e.target.value)}
-                                /> */}
-                            {/* </div> */}
                         </div>
-                        <div className="btn-group">
+                        <DivBtnGroup>
                             <div >
                                 <Button type="submit" variant="success">Add</Button>{' '}
                             </div>
@@ -203,14 +165,13 @@ const NewResturant = () => {
                             <div>
                                 <Button variant="light" onClick={() => closeNewRestaurant()}>Close</Button>
                             </div>
-                        </div>
-                    </form>
-                </div>
+                        </DivBtnGroup>
+                    </Form>
+                </Div>
                 : <div><p>Plese <Link href="/auth/register">register</Link> or <Link href="/auth/login">login</Link> to access this content</p></div>}
-        </div>)
+        </Div>)
 }
 
-
-NewResturant.Layout = MyLayout
+NewResturant.Layout = MyLayout;
 
 export default NewResturant;

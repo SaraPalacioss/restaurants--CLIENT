@@ -10,7 +10,6 @@ const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
     padding: 0;
-    
     font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 
@@ -19,6 +18,9 @@ const GlobalStyle = createGlobalStyle`
   color: black !important;
   text-decoration: none !important;
 }
+
+
+ 
 
 * {
   box-sizing: border-box;
@@ -30,6 +32,8 @@ const theme = {
     primary: "#0070f3",
   },
 };
+
+
 
 
 class MyApp extends App {

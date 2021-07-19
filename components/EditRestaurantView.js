@@ -1,17 +1,17 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import restaurantsService from '../services/restaurants.service'
+import restaurantsService from '../services/restaurants.service';
 import MyLayout from "../layouts/Layout";
-import { Button } from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.css'
 import { useAuthContext } from '../context/authContext';
 import EditRestaurantForm from '../components/EditRestaurantForm';
 
+
 const EditRestaurantView = () => {
 
-    const { saveRestaurantNewDetails, restaurantNewDetails } = useAuthContext()
+    const { saveRestaurantNewDetails, restaurantNewDetails } = useAuthContext();
 
     const router = useRouter();
+
     const { query: { id } } = router;
 
     useEffect(() => {
@@ -22,9 +22,11 @@ const EditRestaurantView = () => {
                 .then((res) => (saveRestaurantNewDetails(res.data)))
                 .catch((err) => console.error('error', err));
         }
+
         loadingDetails();
 
     }, [id]);
+
 
     const onChangeHandler = e => {
         saveRestaurantNewDetails({
@@ -32,6 +34,7 @@ const EditRestaurantView = () => {
             [e.target.name]: e.target.value
         });
     };
+
 
     const submitNewRestaurantDetails = e => {
 
@@ -46,7 +49,7 @@ const EditRestaurantView = () => {
                 (error) => {
                     console.error(error)
                 }
-            )
+            );
     };
 
 
@@ -54,7 +57,8 @@ const EditRestaurantView = () => {
         router.push(`/restaurants/${id}`)
     };
 
-    const { name, address, cuisine_type, image, lat, lng, neighborhood, friday, monday, saturday, sunday, thursday, tuesday, wednesday } = restaurantNewDetails
+
+    const { name, address, cuisine_type, neighborhood } = restaurantNewDetails;
  
     return (
        
@@ -72,8 +76,8 @@ const EditRestaurantView = () => {
             id={id}
         />
     );
-}
+};
 
-EditRestaurantView.Layout = MyLayout
+EditRestaurantView.Layout = MyLayout;
 
 export default EditRestaurantView;

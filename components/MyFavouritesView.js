@@ -1,53 +1,64 @@
 import React, { useEffect } from 'react';
-import { useRouter } from 'next/router';
 import MyLayout from "../layouts/Layout";
-import 'bootstrap/dist/css/bootstrap.css'
 import { useAuthContext } from '../context/authContext';
-import { Row } from 'react-bootstrap';
-import Image from 'next/image'
-import { Button, Spinner } from 'react-bootstrap';
+import { Row, Card, Col } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
+import styled from 'styled-components';
+
+
+const Div = styled.div`
+		margin-top: 80px;
+        margin-bottom: 80px;
+`;
 
 
 const MyFavouritesView = () => {
 
-  const { getUser, restaurants, currentUser, setViewFav, loadingFavDetails, viewFav, loggedIn, session, userID, favourites, setFavourites, setUserID, setUser, setLoggedIn, setSession } = useAuthContext()
+    const { getUser, restaurants, currentUser, setViewFav, loadingFavDetails, viewFav, loggedIn, session, userID, favourites, setFavourites, setUserID, setUser, setLoggedIn, setSession } = useAuthContext()
 
-  useEffect(() => {
- 
-      getUser(currentUser.id)
-    loadingFavDetails()
-  }, []);
+    useEffect(() => {
 
-
-  const HEIGHT = 500;
-  const WIDTH = 825;
+        getUser(currentUser.id)
+        loadingFavDetails()
+    }, []);
 
 
-  return (
-        <div className="container home">
+    const HEIGHT = 450;
+    const WIDTH = 350;
 
-      {viewFav.length ?
-        <div>
-          <Row xs={1} md={4} className="g-4">
-            {viewFav.map((data) => {
-              return (
-                <div key={data.id}>
-                  <a href={`/restaurants/${data._id}`}>
-                    {data.image && <Image src={data.image} height={HEIGHT}
-                      width={WIDTH} alt="restaurant photo" />}
-                    {data.name}
-                    {data.address}
-                  </a>
-                </div>
-              )
-            })}
-          </Row>
-        </div> : <Button variant="light" disabled>
-   
-    Theres no favourites here...
-  </Button>}
-    </div>
-  )
+
+    return (
+        <Div className="container">
+
+            {viewFav.length ?
+                <div>
+                    <Row xs={1} md={2} className="g-4">
+                        {viewFav.map((data) => {
+                            return (
+                                <div key={data.id}>
+                                    <Col>
+                                        <a href={`/restaurants/${data._id}`}>
+                                            <Card>
+                                                <Card.Img variant="top" src={data.image} height={HEIGHT}
+                                                    width={WIDTH} />
+                                                <Card.Body>
+                                                    <Card.Title>{data.name}</Card.Title>
+                                                    <Card.Text>
+                                                        {data.neighborhood}
+                                                    </Card.Text>
+                                                </Card.Body>
+                                            </Card>
+                                        </a>
+                                    </Col>
+                                </div>
+                            )
+                        })}
+                    </Row>
+                </div> : <Button variant="light" disabled>
+                    Theres no favourites here...
+                </Button>}
+        </Div>
+    )
 }
 
 

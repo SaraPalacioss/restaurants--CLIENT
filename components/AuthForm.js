@@ -1,8 +1,8 @@
 import React from 'react';
 import Link from 'next/link';
 import { Button } from 'react-bootstrap';
-
 import styled from 'styled-components';
+
 
 const Label = styled.label`
 		color: black;
@@ -10,12 +10,14 @@ const Label = styled.label`
 		text-transform: uppercase;
 `;
 
+
 const Input = styled.input`
 		width: 100%;
 		height: 30px;
 		margin: 0.5rem;
 		padding: 10px;
 `;
+
 
 const Form = styled.form`
 		width: 100%;
@@ -27,25 +29,25 @@ const Form = styled.form`
 		justify-content: center;
 		align-items: center;
 		text-align: center;
-		
-
 		@media (max-width: 350px) {
 		width: fit-content;
 		font-size: 0.8rem;
 
 		button, label, span {
 			font-size: 0.7rem;
-		}
-	}
+		};
+	};
 `;
 
+
 const Div = styled.div`
-height: 95vh;
-		display: flex;
-		justify-content: center;
-		align-content: center;
-		margin: 0;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    height: 90vh;        
 `;
+
 
 const SpanAlert = styled.span`
 	color: tomato;
@@ -55,21 +57,21 @@ const SpanAlert = styled.span`
 	font-size: 0.8rem;
 `;
 
+
 const SpanInfo = styled.span`
 	padding-top: 20px;
 	padding-bottom: 20px;
 `;
+
 
 const Strong = styled.strong`
 	text-decoration: underline;
 `;
 
 
-
 export default function AuthForm({ username, password, message, submitMethod, handleChange, spaninfo, spanlink, href, textButton }) {
 	return (
 		<Div className="container">
-		
 				<Form onSubmit={submitMethod}>
 					<SpanAlert>{message}</SpanAlert>
 					<div>
@@ -93,7 +95,7 @@ export default function AuthForm({ username, password, message, submitMethod, ha
 						/>
 					</div>
 					<SpanInfo>{spaninfo}<Strong><Link href={href}>{spanlink}</Link></Strong></SpanInfo>
-					<div className="btn-group">
+					<div>
 						<Button variant="light"
 							type="submit"
 						>
@@ -102,8 +104,5 @@ export default function AuthForm({ username, password, message, submitMethod, ha
 					</div>
 				</Form>
 			</Div>
-	
-
-
 	);
-}
+};

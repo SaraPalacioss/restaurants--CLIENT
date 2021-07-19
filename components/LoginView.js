@@ -6,11 +6,14 @@ import MyLayout from "../layouts/Layout";
 import jwt_decode from "jwt-decode";
 import AuthForm from '../components/AuthForm';
 
+
 const LoginUserView = () => {
 
-  const { setAlert, loggedIn, setLoggedIn, setCurrentUser, setAuthToken, setMessage, message, credentials, setCredentials } = useAuthContext()
+  const { setAlert, loggedIn, setLoggedIn, setCurrentUser, setAuthToken, setMessage, message, credentials, setCredentials } = useAuthContext();
   
+
   const router = useRouter();
+
 
   const handleChange = e => {
     const { name, value } = e.target;
@@ -18,36 +21,33 @@ const LoginUserView = () => {
       ...credentials,
       [name]: value,
     });
-
   };
 
-  useEffect(function () {
-    console.log(window.localStorage);
-  }, []);
 
-  const handleLogin = (e) => {
+   const handleLogin = (e) => {
 
     e.preventDefault();
     userService
       .login(credentials)
       .then((res) => {
-        setMessage(res.message)
+        setMessage(res.message);
         const { token } = res.token;
         localStorage.setItem("jwtToken", res.token);
         setAuthToken(res.token);
         const decoded = jwt_decode(res.token);
         setCurrentUser(decoded);
-        setLoggedIn(true)
-        setCredentials({})
-        setMessage()
-        setAlert(false)
-        router.push(`/`)
-        setMessage(res.message)
+        setLoggedIn(true);
+        setCredentials({});
+        setMessage();
+        setAlert(false);
+        router.push(`/`);
+        setMessage(res.message);
       })
       .catch((err) => {
         console.log(err);
       });
   }
+
 
   return (
     <div className="container" >
@@ -66,7 +66,7 @@ const LoginUserView = () => {
   );
 }
 
-LoginUserView.Layout = MyLayout
+LoginUserView.Layout = MyLayout;
 export default LoginUserView;
 
 
