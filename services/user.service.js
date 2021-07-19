@@ -1,9 +1,10 @@
-import getConfig from 'next/config'
 import axios from 'axios';
+import getConfig from 'next/config'
 
 const { publicRuntimeConfig } = getConfig()
+const { APIURL } = publicRuntimeConfig
 
-const baseUrl = `${publicRuntimeConfig.staticFolder}/api/auth`;
+const baseUrl = `${APIURL}/api/auth`;
 class UserService {
 	constructor() {
 		this.instance = axios.create({
