@@ -9,7 +9,7 @@ import Link from 'next/link'
 
 const NewResturant = () => {
 
-    const { name, loggedIn, neighborhood, loadingRestaurants, image, address, lat, lng, cuisine_type, monday, tuesday, wednesday, thursday, friday, saturday, sunday, saveName, saveNeighborhood, saveImage, saveAddress, saveLat, saveLng, saveCuisineType, saveMonday, saveTuesday, saveWednesday, saveThursday, saveFriday, saveSaturday, saveSunday } = useAuthContext()
+    const { name, loggedIn, neighborhood, loadingRestaurants, address, cuisine_type, saveName, saveNeighborhood, saveAddress, saveCuisineType } = useAuthContext()
 
     const router = useRouter();
 
@@ -20,8 +20,8 @@ const NewResturant = () => {
             .addNewRestaurant(restaurant)
             .then((res) => { console.log(res.data); loadingRestaurants() })
             .catch((err) => console.error('error', err));
-    }
 
+    }
 
     const submitNewRestaurant = (e) => {
         e.preventDefault();
@@ -44,7 +44,9 @@ const NewResturant = () => {
         loadingRestaurants()
         window.location.href = '/'
         saveName(''),
-            saveNeighborhood(''), saveImage(''), saveAddress(''), saveLat(''), saveLng(''), saveCuisineType(''), saveMonday(''), saveTuesday(''), saveWednesday(''), saveThursday(''), saveFriday(''), saveSaturday(''), saveSunday('')
+            saveNeighborhood(''),
+            saveAddress(''),
+            saveCuisineType('')
     };
 
     const closeNewRestaurant = (id) => {
@@ -65,7 +67,7 @@ const NewResturant = () => {
                                     type="text"
                                     name="name"
                                     value={name}
-                                    placeholder="Name"
+                                    placeholder="Restauran name"
                                     required="true"
                                     onChange={(e) => saveName(e.target.value)}
                                 />
@@ -76,7 +78,7 @@ const NewResturant = () => {
                                     type="text"
                                     name="neighborhood"
                                     value={neighborhood}
-                                    placeholder="neighborhood"
+                                    placeholder="Restaurant neighborhood"
                                     onChange={(e) => saveNeighborhood(e.target.value)}
                                 />
                             </div>
@@ -86,7 +88,7 @@ const NewResturant = () => {
                                     type="text"
                                     name="address"
                                     value={address}
-                                    placeholder="Address"
+                                    placeholder="Restaurant address"
                                     onChange={(e) => saveAddress(e.target.value)}
                                 />
                             </div>
@@ -110,16 +112,17 @@ const NewResturant = () => {
                                     onChange={(e) => saveLng(e.target.value)}
                                 />
                             </div> */}
-                            {/* <div>
+                            <div>
                                 <label>Cuisine Type: </label>
                                 <input
                                     type="text"
                                     name="cuisine_type"
                                     value={cuisine_type}
-                                    placeholder="Cuisine_type"
+                                    placeholder="Italian, asian, spanish,..."
                                     onChange={(e) => saveCuisineType(e.target.value)}
                                 />
                             </div>
+                            {/*
                             <p className="schedule">Schedule:</p>
                             <div>
                                 <label>Monday: </label>

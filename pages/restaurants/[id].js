@@ -4,7 +4,7 @@ import { useAuthContext } from '../../context/authContext';
 import Image from 'next/image'
 import restaurantsService from '../../services/restaurants.service'
 import userService from '../../services/user.service';
-import { Button } from 'react-bootstrap';
+import { Button, Spinner } from 'react-bootstrap';
 import MyLayout from "../../layouts/Layout";
 
 
@@ -77,7 +77,7 @@ const RestaurantDetails = () => {
 
     return (
         <div className="container home">
-            <h3>{details.name}</h3>
+        {details ?    <div>      <h3>{details.name}</h3>
             <div>
                 {details.image && <Image src={details.image} height={HEIGHT}
                     width={WIDTH} alt="restaurant photo" />}
@@ -98,7 +98,17 @@ const RestaurantDetails = () => {
                 <div>
                 </div>
                 <Button onClick={() => redirectHome()} variant="link">View all restaurants</Button>
-            </div>}
+            </div>}</div>: <Button variant="light" disabled>
+    <Spinner
+      as="span"
+      animation="grow"
+      size="sm"
+      role="status"
+      aria-hidden="true"
+    />
+    Loading...
+  </Button>}
+    
         </div>
     );
 }

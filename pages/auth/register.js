@@ -1,9 +1,8 @@
 import { useAuthContext } from '../../context/authContext';
 import { useRouter } from 'next/router';
 import userService from '../../services/user.service';
-import { Button } from 'react-bootstrap';
 import MyLayout from "../../layouts/Layout";
-import Link from 'next/link'
+import AuthForm from '../../components/AuthForm';
 
 
 const RegisterUser = () => {
@@ -16,7 +15,6 @@ const RegisterUser = () => {
       ...credentials,
       [name]: value,
     });
-
   };
 
   const handleSignUp = e => {
@@ -41,39 +39,17 @@ const RegisterUser = () => {
 
   return (
     <div className="container" >
-      <div>
-        <form noValidate onSubmit={handleSignUp} className="form form-container form-align">
-          {alert && <span>{message}</span>}
-          <div>
-            <label htmlFor="Username">Username</label>
-            <input
-              onChange={handleChange}
-              value={credentials.username}
-              name="username"
-              id="username"
-              type="email"
-            />
-          </div>
-          <div>
-            <label htmlFor="password">Password</label>
-            <input
-              onChange={handleChange}
-              value={credentials.password}
-              id="password"
-              type="password"
-              name="password"
-            />
-          </div>
-          <span>Have an account? login <Link href="/auth/login">here</Link></span>
-          <div className="btn-group">
-            <Button variant="primary"
-              type="submit"
-            >
-              Register
-            </Button>
-          </div>
-        </form>
-      </div>
+      <AuthForm
+           username={credentials.username}
+           password= {credentials.password}
+           message={message}
+           handleChange={handleChange}
+           submitMethod={handleSignUp}
+           spaninfo={`Don't have an account? login `}
+           spanlink={`here`}
+           href={`/auth/login`}
+           textButton={`Register`}
+        />
     </div>
   );
 }

@@ -1,13 +1,10 @@
 import { useAuthContext } from '../../context/authContext';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
-
+import React, { useEffect } from 'react';
 import userService from '../../services/user.service';
 import MyLayout from "../../layouts/Layout";
-import 'bootstrap/dist/css/bootstrap.css'
-import { Button } from 'react-bootstrap';
-import Link from 'next/link'
 import jwt_decode from "jwt-decode";
+import AuthForm from '../../components/AuthForm';
 
 const LoginUser = () => {
 
@@ -54,39 +51,17 @@ const LoginUser = () => {
 
   return (
     <div className="container" >
-      <div>
-        <form onSubmit={handleLogin} className="form form-container form-align">
-          <span>{message}</span>
-          <div>
-            <label htmlFor="Username">Username</label>
-            <input
-              onChange={handleChange}
-              value={credentials.username}
-              name="username"
-              id="username"
-              type="email"
-            />
-          </div>
-          <div>
-            <label htmlFor="password">Password</label>
-            <input
-              onChange={handleChange}
-              value={credentials.password}
-              id="password"
-              type="password"
-              name="password"
-            />
-          </div>
-          <span>Don&apos; t have an account? register <Link href="/auth/register">here</Link></span>
-          <div className="btn-group">
-            <Button variant="light"
-              type="submit"
-            >
-              Login
-            </Button>
-          </div>
-        </form>
-      </div>
+        <AuthForm
+           username={credentials.username}
+           password= {credentials.password}
+           message={message}
+           handleChange={handleChange}
+           submitMethod={handleLogin}
+           spaninfo={`Don't have an account? register `}
+           spanlink={`here`}
+           href={`/auth/register`}
+           textButton={`Login`}
+        />
     </div>
   );
 }
