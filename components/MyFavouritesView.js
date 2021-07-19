@@ -23,7 +23,7 @@ const MyFavouritesView = () => {
     }, []);
 
 
-    const HEIGHT = 450;
+    const HEIGHT = 300;
     const WIDTH = 350;
 
 
