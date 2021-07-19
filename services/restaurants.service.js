@@ -1,10 +1,20 @@
 import getConfig from 'next/config'
-const { publicRuntimeConfig } = getConfig()
 import axios from 'axios';
 
-const  APIURL  = publicRuntimeConfig.APIURL
+const { publicRuntimeConfig } = getConfig()
 
-const baseUrl = `${APIURL}/api/restaurants`;
+
+const getNodeEnv = () => {
+	const { publicRuntimeConfig } = getConfig();
+  
+	const APIURL = publicRuntimeConfig.APIURL || false;
+  
+	return { APIURL }
+  };
+  
+  const env = getNodeEnv()
+  
+  console.log(env)
 
 class RestaurantsService {
 	constructor() {
