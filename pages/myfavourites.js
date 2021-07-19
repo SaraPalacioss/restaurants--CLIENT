@@ -6,51 +6,16 @@ import { useAuthContext } from '../context/authContext';
 import { Row } from 'react-bootstrap';
 import Image from 'next/image'
 import { Button, Spinner } from 'react-bootstrap';
-
+import MyFavouritesView from '../components/MyFavouritesView'
+import LoginUserView from '../components/LoginView';
 
 const MyFavourites = () => {
 
-  const { getUser, restaurants, currentUser, setViewFav, loadingFavDetails, viewFav, loggedIn, session, userID, favourites, setFavourites, setUserID, setUser, setLoggedIn, setSession } = useAuthContext()
-
-  useEffect(() => {
-    getUser(currentUser.id)
-    loadingFavDetails()
-  }, []);
-
-
-  const HEIGHT = 500;
-  const WIDTH = 825;
-
+  const { loggedIn } = useAuthContext()
 
   return (
-        <div className="container home">
-
-      {viewFav.length ?
-        <div>
-          <Row xs={1} md={4} className="g-4">
-            {viewFav.map((data) => {
-              return (
-                <div key={data.id}>
-                  <a href={`/restaurants/${data._id}`}>
-                    {data.image && <Image src={data.image} height={HEIGHT}
-                      width={WIDTH} alt="restaurant photo" />}
-                    {data.name}
-                    {data.address}
-                  </a>
-                </div>
-              )
-            })}
-          </Row>
-        </div> : <Button variant="light" disabled>
-    <Spinner
-      as="span"
-      animation="grow"
-      size="sm"
-      role="status"
-      aria-hidden="true"
-    />
-    Loading...
-  </Button>}
+    <div>
+    {loggedIn ? <MyFavouritesView /> : <LoginUserView/>}
     </div>
   )
 }

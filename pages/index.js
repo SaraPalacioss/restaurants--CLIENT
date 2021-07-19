@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import React, { useEffect, useState } from 'react';
 import restaurantsService from '../services/restaurants.service';
-
+import userService from '../services/user.service';
 import { useRouter } from 'next/router';
 import { Row } from 'react-bootstrap';
 import Link from 'next/link'
@@ -14,13 +14,14 @@ import { Button, Spinner } from 'react-bootstrap';
 
 const Home = () => {
 
-  const { user, restaurants, getUser, loggedIn } = useAuthContext()
+  const { user, restaurants, currentUser, getUser, loggedIn } = useAuthContext()
   const [restaurantsInfo, setRestaurantsInfo] = useState('')
 
   const router = useRouter();
 
   useEffect(() => {
-
+ 
+    getUser(currentUser.id)
     const loadingRestaurants = async () => {
       await restaurantsService
         .getAllRestaurants()
@@ -28,7 +29,7 @@ const Home = () => {
         .catch((err) => console.error('error', err));
     }
     loadingRestaurants()
-
+  
   }, []);
 
 

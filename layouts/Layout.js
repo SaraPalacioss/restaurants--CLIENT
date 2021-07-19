@@ -7,14 +7,17 @@ import Link from 'next/link'
 import restaurantsService from '../services/restaurants.service';
 import setAuthToken from "../utils/setAuthToken";
 import jwt_decode from "jwt-decode";
+import { useRouter } from 'next/router';
 
 export default function MyLayout({ children }) {
 
+    const router = useRouter();
 
     const { user, loggedIn, currentUser, setCurrentUser, restaurants, getUser, setUserID, setRestaurants, setUser, setLoggedIn, setSession } = useAuthContext()
 
     const [restaurantsInfo, setRestaurantsInfo] = useState('')
     useEffect(() => {
+   
         if (localStorage.jwtToken) {
             console.log(localStorage.jwtToken)
             // Set auth token header auth
@@ -81,6 +84,7 @@ export default function MyLayout({ children }) {
                 // Set current user to empty object {} which will set isAuthenticated to false
                 setCurrentUser('');
                 setLoggedIn(false)
+                router.push('/')
             })
             .catch((err) => console.error('error', err));
     }

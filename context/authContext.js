@@ -83,7 +83,7 @@ export const AuthContextProvider = ({ children }) => {
   const getUser = (id) => {
     userService
       .getUser(id)
-      .then((res) => setFavourites(res.favourites))
+      .then((res) => {setFavourites(res.favourites); setViewFav(res.favourites)})
       .catch((err) => console.error('error', err));
   }
 
