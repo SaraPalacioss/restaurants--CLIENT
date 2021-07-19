@@ -1,15 +1,12 @@
 import getConfig from 'next/config'
 import axios from 'axios';
 
-const { publicRuntimeConfig } = getConfig()
-
-
 const getNodeEnv = () => {
 	const { publicRuntimeConfig } = getConfig();
   
 	const APIURL = publicRuntimeConfig.APIURL || false;
   
-	return { APIURL }
+	return  APIURL 
   };
   
   const env = getNodeEnv()
