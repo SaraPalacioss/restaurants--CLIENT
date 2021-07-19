@@ -12,7 +12,7 @@ import { Button } from 'react-bootstrap';
 
 const Home = () => {
 
-  const { user, restaurants,  getUser} = useAuthContext()
+  const { user, restaurants,  getUser, loggedIn} = useAuthContext()
   const [restaurantsInfo, setRestaurantsInfo] = useState('')
 
   const router = useRouter();
@@ -44,7 +44,7 @@ loadingRestaurants()
       
       <div className="container home">
   
-                            {user && 
+                            {loggedIn && 
 
                             
                               <Button variant="primary" size="sm" onClick={() => redirectNewRestaurant()}>
@@ -57,7 +57,7 @@ loadingRestaurants()
           {restaurants.map((data) => {
             return (
               <div key={data._id} params={data._id}>
-                <Link href={`/restaurants/${data._id}`}><a> 
+                <a href={`/restaurants/${data._id}`}><a> 
                   {data.image && <Image src={data.image} height={HEIGHT}
                     width={WIDTH} alt="restaurant photo" />}
               
@@ -73,7 +73,7 @@ loadingRestaurants()
                
 
                 </div></a>
-                </Link>
+                </a>
              
               </div>
             )

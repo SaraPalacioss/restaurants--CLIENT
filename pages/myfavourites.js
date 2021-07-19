@@ -13,7 +13,7 @@ import Image from 'next/image'
 
 const MyFavourites = () => {
 
-  const { user, restaurants, setViewFav, viewFav, loggedIn, session, userID, favourites, setFavourites, setUserID, setUser, setLoggedIn, setSession } = useAuthContext()
+  const { getUser, restaurants, currentUser, setViewFav,loadingFavDetails, viewFav, loggedIn, session, userID, favourites, setFavourites, setUserID, setUser, setLoggedIn, setSession } = useAuthContext()
 
 
   const router = useRouter();
@@ -21,12 +21,14 @@ const MyFavourites = () => {
 
 
   useEffect(() => {
-    const loadingFavDetails = () => {
-      restaurantsService
-        .getAllRestaurants()
-        .then((res) => setViewFav(restaurants.filter((res) => favourites.includes(res._id))))
-        .catch((err) => console.error('error', err));
-    }
+    getUser(currentUser.id)
+
+    // const loadingFavDetails = () => {
+    //   restaurantsService
+    //     .getAllRestaurants()
+    //     .then((res) => setViewFav(restaurants.filter((res) => favourites.includes(res._id))))
+    //     .catch((err) => console.error('error', err));
+    // }
 
 
     loadingFavDetails()
@@ -36,7 +38,7 @@ const MyFavourites = () => {
 
 
 
-  }, []);
+  }, [viewFav]);
 
 
 

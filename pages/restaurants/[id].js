@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useAuthContext } from '../../context/authContext';
 import Image from 'next/image'
@@ -9,7 +9,7 @@ import MyLayout from "../../layouts/Layout";
 
 
 const RestaurantDetails = () => {
-    const { user, getUser, userID, favourites, details, saveDetails } = useAuthContext()
+    const { user, currentUser, getUser, authToken, userID, favourites, setFavourites, details, saveDetails } = useAuthContext()
 
 
     const router = useRouter();
@@ -17,7 +17,11 @@ const RestaurantDetails = () => {
     const { query: { id } } = router;
 
 
+
     useEffect(() => {
+        getUser(currentUser.id)
+
+
         const loadingDetails = async () => {
             await restaurantsService
                 .getRestaurantDetails(id)
@@ -25,10 +29,38 @@ const RestaurantDetails = () => {
                 .catch((err) => console.error('error', err));
         }
 
-
         loadingDetails();
-        // getUser()
+
+        // const getUser = (id) => {
+        //     userService
+        //         .getUser(id)
+
+        //         .then((res) => setFavourites(res.favourites))
+        //         .catch((err) => console.error('error', err));
+        // }
+
+        //  getUser( currentUser.id)
+
+        // const isLoggedIn = () => {
+        //     userService
+        //         .loggedIn()
+        //         .then((res) => {
+        //             console.log(res)
+        //             console.log(window.localStorage.token)
+
+        //         }
+
+        //         )
+        //         .catch((err) => console.error('error', err));
+        // }
+
+
+        // setFavOrNotFavIcon(searchFavourites(favourites, details._id))
+
+
     }, [id]);
+
+
 
 
 
@@ -36,6 +68,7 @@ const RestaurantDetails = () => {
         await restaurantsService.deleteRestaurant(id)
             .then(
                 () => {
+                    getUser(currentUser.id);
                     console.log(`Restaurant with id: ${id} deleted`)
                     router.push('/')
 
@@ -60,28 +93,37 @@ const RestaurantDetails = () => {
 
     };
 
-    const addFavourite = async (restaurantID, userID) => {
+    const addFavourite = (restaurantID, userID) => {
 
-        await userService
+        userService
             .addFavourite(restaurantID, userID)
-            .then((res) => getUser()
+            .then((res) => {
+                console.log(res);
+                getUser(currentUser.id);
+
+            }
             )
             .catch((err) => console.error('error', err));
     }
 
-    const deleteFavourite = async (restaurantID, userID) => {
-        await userService
+    const deleteFavourite = (restaurantID, userID) => {
+        userService
             .deleteFavourite(restaurantID, userID)
-            .then((res) => getUser()
+            .then((res) => {
+
+                getUser(currentUser.id);
+                console.log(res)
+
+            }
             ).catch((err) => console.error('error', err));
     }
 
 
-    const searchFavourites = (arr, restaurantID) => {
-        return arr.includes(restaurantID)
-    }
+    const findDuplicates = () => favourites.includes(id)
 
-    const favOrNotFavIcon = searchFavourites(favourites, details._id)
+    const isInFavs = findDuplicates()
+
+
 
     const HEIGHT = 500;
     const WIDTH = 825;
@@ -90,8 +132,10 @@ const RestaurantDetails = () => {
 
     return (
 
-
         <div className="container home">
+
+            <Button onClick={() => getUser(currentUser.id)} variant="success">user</Button>
+
             <h3>{details.name}</h3>
             <div>
                 {details.image && <Image src={details.image} height={HEIGHT}
@@ -111,21 +155,23 @@ const RestaurantDetails = () => {
                 <p className="schedule-data">Sunday: {details.operating_hours.sunday}</p> */}
             </div>
 
-            {user && <div className="btn-group">
+            {currentUser.id && <div className="btn-group">
                 <div>
                     <Button onClick={() => redirectEditRestaurant(id)} variant="success">Edit</Button>
                 </div>
                 <div>
                     <Button onClick={() => deleteRestaurant(id)} variant="danger">Delete</Button>
                 </div>{' '}
-                {favOrNotFavIcon ? <Button variant="dark" className="fav-btn" onClick={() => deleteFavourite(details._id, userID)}>Remove favourite</Button> : <Button variant="dark" className="fav-btn" onClick={() => addFavourite(details._id, userID)}>Add favourite</Button>
+
+                {isInFavs && <Button variant="dark" className="fav-btn" onClick={() => deleteFavourite(details._id, currentUser.id)}>Remove favourite</Button>}
+                {!isInFavs && <Button variant="dark" className="fav-btn" onClick={() => addFavourite(details._id, currentUser.id)}>Add favourite</Button>
                 }
                 <div>
                 </div>
 
                 <Button onClick={() => redirectHome()} variant="link">View all restaurants</Button>
-               
-          
+
+
             </div>}
 
 

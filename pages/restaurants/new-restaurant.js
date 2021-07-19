@@ -9,7 +9,7 @@ import Link from 'next/link'
 
 const NewResturant = () => {
 
-        const { user, name, neighborhood, loadingRestaurants, image, address, lat, lng, cuisine_type, monday, tuesday, wednesday, thursday, friday, saturday, sunday, saveName, saveNeighborhood, saveImage, saveAddress, saveLat, saveLng, saveCuisineType, saveMonday, saveTuesday, saveWednesday, saveThursday, saveFriday, saveSaturday,saveSunday} =useAuthContext()
+        const { user, name, loggedIn, neighborhood, loadingRestaurants, image, address, lat, lng, cuisine_type, monday, tuesday, wednesday, thursday, friday, saturday, sunday, saveName, saveNeighborhood, saveImage, saveAddress, saveLat, saveLng, saveCuisineType, saveMonday, saveTuesday, saveWednesday, saveThursday, saveFriday, saveSaturday,saveSunday} =useAuthContext()
 
     const router = useRouter();
 
@@ -18,7 +18,7 @@ const NewResturant = () => {
     const addNewRestaurant = async (restaurant) => {
         await restaurantsService
             .addNewRestaurant(restaurant)
-            .then((res) => console.log(res.data))
+            .then((res) => {console.log(res.data);  loadingRestaurants()})
             .catch((err) => console.error('error', err));
     }
 
@@ -28,7 +28,6 @@ const NewResturant = () => {
         addNewRestaurant({
             name,
             neighborhood,
-            image,
             address,
             lat,
             lng,
@@ -41,12 +40,12 @@ const NewResturant = () => {
             saturday,
             sunday,
         });
-     
-
-        router.push(`/`)
+       
+        loadingRestaurants()
+        window.location.href='/'
         saveName(''),
          saveNeighborhood(''), saveImage(''), saveAddress(''), saveLat(''), saveLng(''), saveCuisineType(''), saveMonday(''), saveTuesday(''), saveWednesday(''), saveThursday(''), saveFriday(''), saveSaturday(''),saveSunday('')
-        loadingRestaurants()
+        
     };
 
     const closeNewRestaurant = (id) => {
@@ -57,7 +56,7 @@ const NewResturant = () => {
   
     return (
         <div className="container">
-{user ?      
+{loggedIn ?      
 <div>
     <form onSubmit={submitNewRestaurant} className="form form-container form-align">
         <h3>NEW RESTAURANT</h3>
@@ -81,16 +80,6 @@ const NewResturant = () => {
                     value={neighborhood}
                     placeholder="neighborhood"
                     onChange={(e) => saveNeighborhood(e.target.value)}
-                />
-            </div>
-            <div>
-                <label>Image: </label>
-                <input
-                    type="text"
-                    name="image"
-                    value={image}
-                    placeholder="image"
-                    onChange={(e) => saveImage(e.target.value)}
                 />
             </div>
             <div>

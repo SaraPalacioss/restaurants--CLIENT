@@ -7,14 +7,16 @@ export const AuthContext = createContext(null);
 export const AuthContextProvider = ({ children }) => {
 
   // user states
-  const [user, setUser] = useState('');
+
   const [loggedIn, setLoggedIn] = useState(false);
-  const [session, setSession] = useState(false);
-  const [userID, setUserID] = useState('');
+
   const [credentials, setCredentials] = useState({
     username: '',
     password: '',
   });
+  const [authToken, setAuthToken] = useState('')
+const [currentUser, setCurrentUser] = useState('')
+
   const [alert, setAlert] = useState(false)
   const [message, setMessage] = useState('')
   const [favourites, setFavourites] = useState([]);
@@ -56,42 +58,49 @@ export const AuthContextProvider = ({ children }) => {
 
   const checkIfLoggedIn = () => {
     userService
-      .loggedin()
+      .getUser()
       .then((result) => {
         setLoggedIn(true);
         setUser(result.username);
         setSession(true);
         setUserID(result.id)
-        console.log(result)
       });
   };
 
-  const getUser = async () => {
-    await userService
-      .loggedin()
-      .then((res) => setFavourites(res.favourites))
+  const loadingFavDetails = () => {
+    restaurantsService
+      .getAllRestaurants()
+      .then((res) => setViewFav(restaurants.filter((res) => favourites.includes(res._id))))
       .catch((err) => console.error('error', err));
   }
 
-  const loadingRestaurants = () => {
-    restaurantsService
+  const loadingRestaurants = async () => {
+    await restaurantsService
       .getAllRestaurants()
       .then((res) => console.log(res))
       .catch((err) => console.error('error', err));
   }
 
-  
+  const getUser = (id) => {
+    userService
+        .getUser(id)
+        .then((res) => setFavourites(res.favourites))
+        .catch((err) => console.error('error', err));
+}
 
   const values = React.useMemo(() => (
     {
-      user, loggedIn, session, userID, viewFav, credentials, alert, message, restaurants, favourites, restaurantNewDetails, details, name, neighborhood, image, address, lat, lng, cuisine_type, monday, tuesday, wednesday, thursday, friday, saturday, sunday
-      , setUser, setLoggedIn, setSession, setViewFav, setUserID, setCredentials, setAlert, getUser, setMessage, saveRestaurantNewDetails, setFavourites, setRestaurants, checkIfLoggedIn, loadingRestaurants, saveDetails, saveName, saveNeighborhood, saveImage, saveAddress, saveLat, saveLng, saveCuisineType, saveMonday, saveTuesday, saveWednesday, saveThursday, saveFriday, saveSaturday, saveSunday
+       loggedIn,  authToken, currentUser,  viewFav, credentials, alert, message, restaurants, favourites, restaurantNewDetails, details, name, neighborhood, image, address, lat, lng, cuisine_type, monday, tuesday, wednesday, thursday, friday, saturday, sunday
+      ,  setLoggedIn,loadingFavDetails,  setAuthToken, getUser, setCurrentUser,  setViewFav,  setCredentials, setAlert,  setMessage, saveRestaurantNewDetails, setFavourites, setRestaurants, checkIfLoggedIn, loadingRestaurants, saveDetails, saveName, saveNeighborhood, saveImage, saveAddress, saveLat, saveLng, saveCuisineType, saveMonday, saveTuesday, saveWednesday, saveThursday, saveFriday, saveSaturday, saveSunday
     }),
     [
-      user, loggedIn, session, userID, alert, message, viewFav, credentials, favourites, restaurants, restaurantNewDetails, details, name, neighborhood, image, address, lat, lng, cuisine_type, monday, tuesday, wednesday, thursday, friday, saturday, sunday]);
+       loggedIn,  authToken, currentUser,  alert, message, viewFav, credentials, favourites, restaurants, restaurantNewDetails, details, name, neighborhood, image, address, lat, lng, cuisine_type, monday, tuesday, wednesday, thursday, friday, saturday, sunday]);
 
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;
 }
+
+
+
 
 export function useAuthContext() {
 

@@ -14,7 +14,17 @@ class RestaurantsService {
 		});
 	}
 	getAllRestaurants = () => this.instance.get('/');
-	getRestaurantDetails = (id) => this.instance.get(`/${id}`);
+	// getRestaurantDetails = (id) => this.instance.get(`/${id}`);
+
+
+	getRestaurantDetails = (id) => {
+		return this.instance
+			.get(`/${id}`)
+			.then(res => Promise.resolve(res))
+			.catch(error => console.error(error))
+	}
+
+
 	myfavourites = () => this.instance.get(`/myfavourites`);
 
 

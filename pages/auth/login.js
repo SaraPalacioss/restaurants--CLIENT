@@ -1,13 +1,16 @@
 import { useAuthContext } from '../../context/authContext';
 import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
+
 import userService from '../../services/user.service';
 import MyLayout from "../../layouts/Layout";
 import 'bootstrap/dist/css/bootstrap.css'
 import { Button } from 'react-bootstrap';
 import Link from 'next/link'
+import jwt_decode from "jwt-decode";
 
 const LoginUser = () => {
-  const { setAlert, setMessage,alert, message, checkIfLoggedIn, credentials, setCredentials } = useAuthContext()
+  const { setAlert, getUser, authToken, setFavourites, currentUser, setLoggedIn, setCurrentUser, setAuthToken, setMessage, alert, message, checkIfLoggedIn, credentials, setUser, setUserID, setCredentials } = useAuthContext()
   const router = useRouter();
 
 
@@ -20,24 +23,43 @@ const LoginUser = () => {
     });
 
   };
-
+  useEffect(function () {
+    console.log(window.localStorage);
+  }, []);
   const handleLogin = (e) => {
+
 
     e.preventDefault();
     userService
       .login(credentials)
       .then((res) => {
-        if (res.username) {
-          checkIfLoggedIn()
-          setMessage()
-          setAlert(false)
-          router.push(`/`)
-          console.log('huhu')
 
-        } else {
-          setMessage(res.message)
-          setAlert(true)
-        }
+
+
+        // Save to localStorage
+        setMessage(res.message)
+        // Set token to localStorage
+
+        const { token } = res.token;
+        localStorage.setItem("jwtToken", res.token);
+        // Set token to Auth header
+        setAuthToken(res.token);
+        // Decode token to get user data
+        const decoded = jwt_decode(res.token);
+        // Set current user
+        setCurrentUser(decoded);
+        setLoggedIn(true)
+
+        setCredentials({})
+        // checkIfLoggedIn()
+        setMessage()
+        setAlert(false)
+
+        router.push(`/`)
+        setMessage(res.message)
+
+
+
 
 
       })
@@ -47,14 +69,14 @@ const LoginUser = () => {
   }
 
 
- 
+
 
   return (
     <div className="container" >
 
       <div >
         <form onSubmit={handleLogin} className="form form-container form-align">
-        {alert && <span>{message}</span>}
+          <span>{message}</span>
           <div>
             <label htmlFor="Username">Username</label>
 
