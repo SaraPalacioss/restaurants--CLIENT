@@ -77,7 +77,7 @@ const LoginUser = () => {
               name="password"
             />
           </div>
-          <span>Don't have an account? register <Link href="/auth/register">here</Link></span>
+          <span>Don&apos; t have an account? register <Link href="/auth/register">here</Link></span>
           <div className="btn-group">
             <Button variant="light"
               type="submit"
