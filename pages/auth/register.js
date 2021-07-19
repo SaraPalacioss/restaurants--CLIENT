@@ -10,7 +10,6 @@ const RegisterUser = () => {
   const { setAlert, setMessage, alert, message, credentials, setCredentials } = useAuthContext()
   const router = useRouter();
 
-  
   const handleChange = e => {
     const { name, value } = e.target;
     setCredentials({
@@ -23,32 +22,28 @@ const RegisterUser = () => {
   const handleSignUp = e => {
     e.preventDefault()
     userService
-    .register(credentials)
-    .then((res) => {
-      if (res.username) {
-        setMessage()
-        setAlert(false)
-        router.push(`/auth/login`)
-
-      } else {
-        setMessage(res.message)
-        setAlert(true)
-      }
-
-
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-}
+      .register(credentials)
+      .then((res) => {
+        if (res.username) {
+          setMessage()
+          setAlert(false)
+          router.push(`/auth/login`)
+        } else {
+          setMessage(res.message)
+          setAlert(true)
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
 
   return (
     <div className="container" >
       <div>
         <form noValidate onSubmit={handleSignUp} className="form form-container form-align">
-        {alert && <span>{message}</span>}
-
+          {alert && <span>{message}</span>}
           <div>
             <label htmlFor="Username">Username</label>
             <input

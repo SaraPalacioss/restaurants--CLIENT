@@ -12,27 +12,27 @@ import { Button } from 'react-bootstrap';
 
 const Home = () => {
 
-  const { user, restaurants,  getUser, loggedIn} = useAuthContext()
+  const { user, restaurants, getUser, loggedIn } = useAuthContext()
   const [restaurantsInfo, setRestaurantsInfo] = useState('')
 
   const router = useRouter();
 
   useEffect(() => {
-  
+
     const loadingRestaurants = async () => {
-        await restaurantsService
-            .getAllRestaurants()
-            .then((res) => (setRestaurantsInfo(res.data)))
-            .catch((err) => console.error('error', err));
+      await restaurantsService
+        .getAllRestaurants()
+        .then((res) => (setRestaurantsInfo(res.data)))
+        .catch((err) => console.error('error', err));
     }
-loadingRestaurants()
-    // getUser()
-}, []);
+    loadingRestaurants()
+    
+  }, []);
 
 
   const redirectNewRestaurant = () => {
     router.push(`/restaurants/new-restaurant`)
-};
+  };
 
 
 
@@ -41,44 +41,30 @@ loadingRestaurants()
 
   return (
     <div>
-      
       <div className="container home">
-  
-                            {loggedIn && 
-
-                            
-                              <Button variant="primary" size="sm" onClick={() => redirectNewRestaurant()}>
-                                Add new restaurant
-                            </Button>
-                      
-                             
-                            }
-        <Row xs={1} md={4} className="g-4">
+        {loggedIn &&
+          <Button variant="primary" size="sm" onClick={() => redirectNewRestaurant()}>
+            Add new restaurant
+          </Button>
+        }
+       {restaurants.length ?  <Row xs={1} md={4} className="g-4">
           {restaurants.map((data) => {
             return (
               <div key={data._id} params={data._id}>
-                <a href={`/restaurants/${data._id}`}><a> 
+                <a href={`/restaurants/${data._id}`}><a>
                   {data.image && <Image src={data.image} height={HEIGHT}
                     width={WIDTH} alt="restaurant photo" />}
-              
-           
-  
-
-                <div className="align-info">
-                  
+                  <div className="align-info">
                     <h2>{data.name}</h2>
                     <div>
                       <span>{data.neighborhood}</span>
                     </div>
-               
-
-                </div></a>
+                  </div></a>
                 </a>
-             
               </div>
             )
           })}
-        </Row>
+        </Row> : <div>Loading...</div>}
       </div>
     </div>
   )

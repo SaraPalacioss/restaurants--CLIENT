@@ -8,6 +8,7 @@ import { useAuthContext } from '../../../context/authContext';
 
 
 const EditRestaurant = () => {
+
     const { saveRestaurantNewDetails, restaurantNewDetails } = useAuthContext()
 
     const router = useRouter();
@@ -39,7 +40,6 @@ const EditRestaurant = () => {
         restaurantsService.editRestaurantDetails(id, restaurantNewDetails)
             .then(
                 (data) => {
-
                     saveRestaurantNewDetails(data)
                     router.push(`/restaurants/${id}`)
                 },
@@ -47,8 +47,7 @@ const EditRestaurant = () => {
                     console.error(error)
                 }
             )
-    }
-
+    };
 
 
     const closeEdition = (id) => {
@@ -56,10 +55,10 @@ const EditRestaurant = () => {
     };
 
     const { name, address, cuisine_type, image, lat, lng, neighborhood, friday, monday, saturday, sunday, thursday, tuesday, wednesday } = restaurantNewDetails
-    
+
     const HEIGHT = 300;
     const WIDTH = 325;
-    
+
     return (
         <div className="container">
             <form onSubmit={submitNewRestaurantDetails} className="form form-container form-align">
@@ -105,7 +104,6 @@ const EditRestaurant = () => {
                             onChange={onChangeHandler}
                         />
                     </div>
-
                     <div>
                         <label>lat: </label>
                         <input

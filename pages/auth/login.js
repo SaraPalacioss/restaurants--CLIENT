@@ -10,10 +10,10 @@ import Link from 'next/link'
 import jwt_decode from "jwt-decode";
 
 const LoginUser = () => {
-  const { setAlert, getUser, authToken, setFavourites, currentUser, setLoggedIn, setCurrentUser, setAuthToken, setMessage, alert, message, checkIfLoggedIn, credentials, setUser, setUserID, setCredentials } = useAuthContext()
+
+  const { setAlert, setLoggedIn, setCurrentUser, setAuthToken, setMessage, message, credentials, setCredentials } = useAuthContext()
+  
   const router = useRouter();
-
-
 
   const handleChange = e => {
     const { name, value } = e.target;
@@ -23,63 +23,42 @@ const LoginUser = () => {
     });
 
   };
+
   useEffect(function () {
     console.log(window.localStorage);
   }, []);
-  const handleLogin = (e) => {
 
+  const handleLogin = (e) => {
 
     e.preventDefault();
     userService
       .login(credentials)
       .then((res) => {
-
-
-
-        // Save to localStorage
         setMessage(res.message)
-        // Set token to localStorage
-
         const { token } = res.token;
         localStorage.setItem("jwtToken", res.token);
-        // Set token to Auth header
         setAuthToken(res.token);
-        // Decode token to get user data
         const decoded = jwt_decode(res.token);
-        // Set current user
         setCurrentUser(decoded);
         setLoggedIn(true)
-
         setCredentials({})
-        // checkIfLoggedIn()
         setMessage()
         setAlert(false)
-
         router.push(`/`)
         setMessage(res.message)
-
-
-
-
-
       })
       .catch((err) => {
         console.log(err);
       });
   }
 
-
-
-
   return (
     <div className="container" >
-
-      <div >
+      <div>
         <form onSubmit={handleLogin} className="form form-container form-align">
           <span>{message}</span>
           <div>
             <label htmlFor="Username">Username</label>
-
             <input
               onChange={handleChange}
               value={credentials.username}
